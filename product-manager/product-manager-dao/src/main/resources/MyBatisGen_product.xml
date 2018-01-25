@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC
+        "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration>
+
+    <!-- !!!! 数据连接驱动 !!!! -->
+    <classPathEntry location="E:\jar\mysql-connector-java-5.1.6.jar"/>
+
+    <context id="context" targetRuntime="MyBatis3">
+        <commentGenerator>
+            <!--是否去除注释（true表示不生成注释）-->
+            <property name="suppressAllComments" value="true"/>
+            <property name="suppressDate" value="true"/>
+        </commentGenerator>
+
+        <!-- !!!! 数据库连接的信息：驱动类、连接地址、用户名、密码 !!!! -->
+        <jdbcConnection
+                        driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://101.132.125.217:3306/mmall"
+                        userId="yu"
+                        password="123"/>
+
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="false"/>
+        </javaTypeResolver>
+
+        <!-- !!!! 生成pojo类的保存路径!!!! -->
+        <javaModelGenerator targetPackage="com.yyyu.product.pojo" targetProject="THIS_CONFIGURATION_IS_NOT_REQUIRED">
+            <property name="enableSubPackages" value="false"/>
+            <property name="trimStrings" value="false"/>
+        </javaModelGenerator>
+
+        <!-- !!!! 生成mapper映射xml文件的保存路径 !!!! -->
+        <sqlMapGenerator targetPackage="com.yyyu.product.dao" targetProject="THIS_CONFIGURATION_IS_NOT_REQUIRED">
+            <property name="enableSubPackages" value="false"/>
+        </sqlMapGenerator>
+
+        <!-- !!!! 生成mapper映射文件对应java类的保存路径!!!! -->
+        <javaClientGenerator targetPackage="com.yyyu.product.dao" targetProject="THIS_CONFIGURATION_IS_NOT_REQUIRED" type="XMLMAPPER">
+            <property name="enableSubPackages" value="false"/>
+        </javaClientGenerator>
+
+        <!-- !!!! 要自动生成的表 !!!! -->
+        <table tableName="mall_product_category" />
+        <table tableName="mall_product" />
+        <table tableName="mall_order"/>
+        <table tableName="mall_order_item"/>
+        <table tableName="mall_pay_info"/>
+        <table tableName="mall_logistics_info"/>
+        <table tableName="mall_cart"/>
+
+    </context>
+</generatorConfiguration>

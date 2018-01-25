@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yyyu.product.dao.MallPayInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.yyyu.product.pojo.MallPayInfo" >
+    <id column="pay_id" property="payId" jdbcType="BIGINT" />
+    <result column="order_Id" property="orderId" jdbcType="BIGINT" />
+    <result column="pay_platform" property="payPlatform" jdbcType="SMALLINT" />
+    <result column="platform_no" property="platformNo" jdbcType="VARCHAR" />
+    <result column="platform_status" property="platformStatus" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    pay_id, order_Id, pay_platform, platform_no, platform_status, create_time, update_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.yyyu.product.pojo.MallPayInfoExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from mall_pay_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from mall_pay_info
+    where pay_id = #{payId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from mall_pay_info
+    where pay_id = #{payId,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.yyyu.product.pojo.MallPayInfoExample" >
+    delete from mall_pay_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.yyyu.product.pojo.MallPayInfo" >
+    insert into mall_pay_info (pay_id, order_Id, pay_platform, 
+      platform_no, platform_status, create_time, 
+      update_time)
+    values (#{payId,jdbcType=BIGINT}, #{orderId,jdbcType=BIGINT}, #{payPlatform,jdbcType=SMALLINT}, 
+      #{platformNo,jdbcType=VARCHAR}, #{platformStatus,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yyyu.product.pojo.MallPayInfo" >
+    insert into mall_pay_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="payId != null" >
+        pay_id,
+      </if>
+      <if test="orderId != null" >
+        order_Id,
+      </if>
+      <if test="payPlatform != null" >
+        pay_platform,
+      </if>
+      <if test="platformNo != null" >
+        platform_no,
+      </if>
+      <if test="platformStatus != null" >
+        platform_status,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="payId != null" >
+        #{payId,jdbcType=BIGINT},
+      </if>
+      <if test="orderId != null" >
+        #{orderId,jdbcType=BIGINT},
+      </if>
+      <if test="payPlatform != null" >
+        #{payPlatform,jdbcType=SMALLINT},
+      </if>
+      <if test="platformNo != null" >
+        #{platformNo,jdbcType=VARCHAR},
+      </if>
+      <if test="platformStatus != null" >
+        #{platformStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.yyyu.product.pojo.MallPayInfoExample" resultType="java.lang.Integer" >
+    select count(*) from mall_pay_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update mall_pay_info
+    <set >
+      <if test="record.payId != null" >
+        pay_id = #{record.payId,jdbcType=BIGINT},
+      </if>
+      <if test="record.orderId != null" >
+        order_Id = #{record.orderId,jdbcType=BIGINT},
+      </if>
+      <if test="record.payPlatform != null" >
+        pay_platform = #{record.payPlatform,jdbcType=SMALLINT},
+      </if>
+      <if test="record.platformNo != null" >
+        platform_no = #{record.platformNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.platformStatus != null" >
+        platform_status = #{record.platformStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update mall_pay_info
+    set pay_id = #{record.payId,jdbcType=BIGINT},
+      order_Id = #{record.orderId,jdbcType=BIGINT},
+      pay_platform = #{record.payPlatform,jdbcType=SMALLINT},
+      platform_no = #{record.platformNo,jdbcType=VARCHAR},
+      platform_status = #{record.platformStatus,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yyyu.product.pojo.MallPayInfo" >
+    update mall_pay_info
+    <set >
+      <if test="orderId != null" >
+        order_Id = #{orderId,jdbcType=BIGINT},
+      </if>
+      <if test="payPlatform != null" >
+        pay_platform = #{payPlatform,jdbcType=SMALLINT},
+      </if>
+      <if test="platformNo != null" >
+        platform_no = #{platformNo,jdbcType=VARCHAR},
+      </if>
+      <if test="platformStatus != null" >
+        platform_status = #{platformStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where pay_id = #{payId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yyyu.product.pojo.MallPayInfo" >
+    update mall_pay_info
+    set order_Id = #{orderId,jdbcType=BIGINT},
+      pay_platform = #{payPlatform,jdbcType=SMALLINT},
+      platform_no = #{platformNo,jdbcType=VARCHAR},
+      platform_status = #{platformStatus,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where pay_id = #{payId,jdbcType=BIGINT}
+  </update>
+</mapper>
