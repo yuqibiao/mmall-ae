@@ -45,13 +45,10 @@ public class UserServiceImpl implements UserServiceInter{
     }
 
     @Override
-    public PageInfo<MallUser> selectUserByPage(Integer from, Integer to) {
-        if (from<=0){
-            from=1;
-        }
+    public PageInfo<MallUser> selectUserByPage(Integer start, Integer size) {
         MallUserExample mallUserExample = new MallUserExample();
         mallUserExample.setDistinct(false);
-        PageHelper.offsetPage(from , to-from+1);
+        PageHelper.offsetPage(start , size);
         List<MallUser> mallUsers = userMapper.selectByExample(mallUserExample);
         return new PageInfo<>(mallUsers);
     }

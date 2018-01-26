@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2018/1/24 16:35:36                           */
+/* Created on:     2018/1/26 17:07:42                           */
 /*==============================================================*/
 
 
@@ -37,11 +37,12 @@ create table mall_cart
    user_id              bigint,
    product_id           bigint,
    quantity             int,
-   checked              smallint default 1 comment '1-¹´Ñ¡ 2- ²»¹´Ñ¡ Ä¬ÈÏ1',
+   checked              smallint default 1 comment '1-å‹¾é€‰ 2- ä¸å‹¾é€‰ é»˜è®¤1',
    create_time          datetime default CURRENT_TIMESTAMP,
    update_time          datetime default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
    primary key (cart_Id)
-);
+)
+DEFAULT CHARACTER SET = utf8;
 
 /*==============================================================*/
 /* Table: mall_logistics_info                                   */
@@ -49,7 +50,7 @@ create table mall_cart
 create table mall_logistics_info
 (
    logistics_id         bigint not null auto_increment,
-   user_id              bigint comment 'ÓÃ»§Id¡¢×ÔÔö',
+   user_id              bigint comment 'ç”¨æˆ·Idã€è‡ªå¢',
    receiver_name        varchar(32) not null,
    receiver_tel         varchar(16),
    receiver_phone       varchar(16) not null,
@@ -61,9 +62,10 @@ create table mall_logistics_info
    create_time          datetime default CURRENT_TIMESTAMP,
    update_time          datetime default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
    primary key (logistics_id)
-);
+)
+DEFAULT CHARACTER SET = utf8;
 
-alter table mall_logistics_info comment 'ÎïÁ÷ĞÅÏ¢';
+alter table mall_logistics_info comment 'ç‰©æµä¿¡æ¯';
 
 /*==============================================================*/
 /* Table: mall_order                                            */
@@ -71,7 +73,7 @@ alter table mall_logistics_info comment 'ÎïÁ÷ĞÅÏ¢';
 create table mall_order
 (
    order_Id             bigint not null auto_increment,
-   user_id              bigint comment 'ÓÃ»§Id',
+   user_id              bigint comment 'ç”¨æˆ·Id',
    logistics_id         bigint,
    order_no             bigint(20) not null,
    payment              decimal(20,2) not null,
@@ -85,9 +87,10 @@ create table mall_order
    create_time          datetime default CURRENT_TIMESTAMP,
    update_time          datetime default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
    primary key (order_Id)
-);
+)
+DEFAULT CHARACTER SET = utf8;
 
-alter table mall_order comment 'ÉÌÆ·¶©µ¥';
+alter table mall_order comment 'å•†å“è®¢å•';
 
 /*==============================================================*/
 /* Table: mall_order_item                                       */
@@ -98,16 +101,17 @@ create table mall_order_item
    order_Id             bigint,
    product_id           bigint,
    quantity             int,
-   current_unit_price   decimal(20,2) comment 'Éú³É¶©µ¥Ê±ÉÌÆ·µÄ¼Û¸ñ',
+   current_unit_price   decimal(20,2) comment 'ç”Ÿæˆè®¢å•æ—¶å•†å“çš„ä»·æ ¼',
    product_name         varchar(64),
    product_image        varchar(128),
    total_price          decimal(20,2),
    create_time          datetime default CURRENT_TIMESTAMP,
    update_time          datetime default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
    primary key (order_item_id)
-);
+)
+DEFAULT CHARACTER SET = utf8;
 
-alter table mall_order_item comment '¶©µ¥ÏêÏ¸ĞÅÏ¢';
+alter table mall_order_item comment 'è®¢å•è¯¦ç»†ä¿¡æ¯';
 
 /*==============================================================*/
 /* Table: mall_pay_info                                         */
@@ -122,9 +126,10 @@ create table mall_pay_info
    create_time          datetime default CURRENT_TIMESTAMP,
    update_time          datetime default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
    primary key (pay_id)
-);
+)
+DEFAULT CHARACTER SET = utf8;
 
-alter table mall_pay_info comment 'Ö§¸¶Ïà¹ØµÄĞÅÏ¢';
+alter table mall_pay_info comment 'æ”¯ä»˜ç›¸å…³çš„ä¿¡æ¯';
 
 /*==============================================================*/
 /* Table: mall_permission                                       */
@@ -135,16 +140,17 @@ create table mall_permission
    parent_id            int,
    name                 varchar(64) not null,
    description          varchar(256),
-   status               smallint default 1 comment '1-¿ÉÓÃ 2-²»¿ÉÓÃ Ä¬ÈÏ1',
+   status               smallint default 1 comment '1-å¯ç”¨ 2-ä¸å¯ç”¨ é»˜è®¤1',
    code                 smallint,
-   target               varchar(128) comment 'action¡¢url ',
-   type                 smallint default 1 comment '1-È¨ÏŞ 2-²Ëµ¥ Ä¬ÈÏ1',
+   target               varchar(128) comment 'actionã€url ',
+   type                 smallint default 1 comment '1-æƒé™ 2-èœå• é»˜è®¤1',
    create_time          datetime default CURRENT_TIMESTAMP,
    update_time          datetime default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
    primary key (permission_id)
-);
+)
+DEFAULT CHARACTER SET = utf8;
 
-alter table mall_permission comment '²Ù×÷È¨ÏŞ';
+alter table mall_permission comment 'æ“ä½œæƒé™';
 
 /*==============================================================*/
 /* Table: mall_product                                          */
@@ -152,38 +158,40 @@ alter table mall_permission comment '²Ù×÷È¨ÏŞ';
 create table mall_product
 (
    product_id           bigint not null auto_increment,
-   category_id          bigint comment 'ÉÌÆ··ÖÀàId ¡¢×ÔÔöÀàĞÍId',
+   category_id          bigint comment 'å•†å“åˆ†ç±»Id ã€è‡ªå¢ç±»å‹Id',
    name                 varchar(64) not null,
    subtitle             varchar(256),
    main_image           varchar(128),
-   sub_image            text comment '´æjson¸ñÊ½µÄÍ¼Æ¬µØÖ·',
+   sub_image            text comment 'å­˜jsonæ ¼å¼çš„å›¾ç‰‡åœ°å€',
    detail               text,
    price                decimal(20,2) not null,
    stock                bigint,
-   status               smallint not null default 1 comment '1-ÔÚÊÛ 2-ÏÂ¼Ü 3-É¾³ı Ä¬ÈÏÎª1',
+   status               smallint not null default 1 comment '1-åœ¨å”® 2-ä¸‹æ¶ 3-åˆ é™¤ é»˜è®¤ä¸º1',
    create_time          datetime default CURRENT_TIMESTAMP,
    update_time          datetime default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
    primary key (product_id)
-);
+)
+DEFAULT CHARACTER SET = utf8;
 
-alter table mall_product comment 'ÉÌÆ·ĞÅÏ¢±í';
+alter table mall_product comment 'å•†å“ä¿¡æ¯è¡¨';
 
 /*==============================================================*/
 /* Table: mall_product_category                                 */
 /*==============================================================*/
 create table mall_product_category
 (
-   category_id          bigint not null auto_increment comment 'ÉÌÆ··ÖÀàId ¡¢×ÔÔöÀàĞÍId',
-   parent_id            bigint comment 'ÉÏÒ»¼¶·ÖÀàµÄId£¨Ê÷ĞÎ·ÖÀà£©',
+   category_id          bigint not null auto_increment comment 'å•†å“åˆ†ç±»Id ã€è‡ªå¢ç±»å‹Id',
+   parent_id            bigint comment 'ä¸Šä¸€çº§åˆ†ç±»çš„Idï¼ˆæ ‘å½¢åˆ†ç±»ï¼‰',
    name                 varchar(32) not null,
-   status               smallint default 1 comment '1-Õı³£ 2-·Ï³ı Ä¬ÈÏÎª1',
+   status               smallint default 1 comment '1-æ­£å¸¸ 2-åºŸé™¤ é»˜è®¤ä¸º1',
    code                 smallint,
    create_time          datetime default CURRENT_TIMESTAMP,
    update_time          datetime default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
    primary key (category_id)
-);
+)
+DEFAULT CHARACTER SET = utf8;
 
-alter table mall_product_category comment 'ÉÌÆ·µÄ·ÖÀàĞÅÏ¢';
+alter table mall_product_category comment 'å•†å“çš„åˆ†ç±»ä¿¡æ¯';
 
 /*==============================================================*/
 /* Table: mall_role                                             */
@@ -194,13 +202,14 @@ create table mall_role
    name                 varchar(64) not null,
    code                 smallint,
    description          varchar(256),
-   status               smallint default 1 comment '1-¿ÉÓÃ 2-½ûÖ¹ Ä¬ÈÏÎª1',
+   status               smallint default 1 comment '1-å¯ç”¨ 2-ç¦æ­¢ é»˜è®¤ä¸º1',
    create_time          datetime default CURRENT_TIMESTAMP,
    update_time          datetime default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
    primary key (role_id)
-);
+)
+DEFAULT CHARACTER SET = utf8;
 
-alter table mall_role comment '²»Í¬½ÇÉ«ÓĞ²»Í¬µÄÈ¨ÏŞ';
+alter table mall_role comment 'ä¸åŒè§’è‰²æœ‰ä¸åŒçš„æƒé™';
 
 /*==============================================================*/
 /* Table: mall_role_permission                                  */
@@ -209,31 +218,35 @@ create table mall_role_permission
 (
    permission_id        int not null,
    role_id              int not null,
+   create_time          datetime default CURRENT_TIMESTAMP,
+   update_time          datetime default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
    primary key (permission_id, role_id)
-);
+)
+DEFAULT CHARACTER SET = utf8;
 
-alter table mall_role_permission comment '½ÇÉ«È¨ÏŞ¹ØÏµ¶ÔÓ¦±í';
+alter table mall_role_permission comment 'è§’è‰²æƒé™å…³ç³»å¯¹åº”è¡¨';
 
 /*==============================================================*/
 /* Table: mall_user                                             */
 /*==============================================================*/
 create table mall_user
 (
-   user_id              bigint not null auto_increment comment 'ÓÃ»§Id',
-   username             varchar(64) not null comment 'Î¨Ò»',
-   password             varchar(64) not null comment 'MD5¼ÓÃÜ',
+   user_id              bigint not null auto_increment comment 'ç”¨æˆ·Id',
+   username             varchar(64) not null comment 'å”¯ä¸€',
+   password             varchar(64) not null comment 'MD5åŠ å¯†',
    phone                varchar(16),
    email                varchar(64),
-   status               smallint default 1 comment '1-¿ÉÄÜ 2-²»¿ÉÓÃ Ä¬ÈÏÎª1',
+   status               smallint default 1 comment '1-å¯èƒ½ 2-ä¸å¯ç”¨ é»˜è®¤ä¸º1',
    question             varchar(128),
    answer               varchar(128),
-   create_time          datetime default CURRENT_TIMESTAMP comment 'Êı¾İ²åÈëÊ±¼ä',
-   update_ime           datetime default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP comment 'Êı¾İ¸üĞÂÊ±¼ä',
+   create_time          datetime default CURRENT_TIMESTAMP comment 'æ•°æ®æ’å…¥æ—¶é—´',
+   update_time          datetime default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP comment 'æ•°æ®æ›´æ–°æ—¶é—´',
    primary key (user_id),
    unique key AK_Key_unique (username)
-);
+)
+DEFAULT CHARACTER SET = utf8;
 
-alter table mall_user comment 'ÓÃ»§±í';
+alter table mall_user comment 'ç”¨æˆ·è¡¨';
 
 /*==============================================================*/
 /* Table: mall_user_role                                        */
@@ -241,11 +254,14 @@ alter table mall_user comment 'ÓÃ»§±í';
 create table mall_user_role
 (
    role_id              int not null,
-   user_id              bigint not null comment 'ÓÃ»§Id',
+   user_id              bigint not null comment 'ç”¨æˆ·Id',
+   create_time          datetime default CURRENT_TIMESTAMP,
+   updatetime           datetime default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
    primary key (role_id, user_id)
-);
+)
+DEFAULT CHARACTER SET = utf8;
 
-alter table mall_user_role comment 'ÓÃ»§½ÇÉ«¶ÔÓ¦¹ØÏµ±í';
+alter table mall_user_role comment 'ç”¨æˆ·è§’è‰²å¯¹åº”å…³ç³»è¡¨';
 
 alter table mall_cart add constraint FK_Reference_3 foreign key (user_id)
       references mall_user (user_id) on delete restrict on update restrict;

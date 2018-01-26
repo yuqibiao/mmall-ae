@@ -237,7 +237,7 @@
           <!-- 可以灵活配置工程路径 -->
           <path>/mmall</path>
           <!-- 可以灵活配置端口号 -->
-          <port>8088</port>
+          <port>8080</port>
         </configuration>
         <!-- 在打包的时候运行这个容器 -->
         <executions>

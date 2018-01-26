@@ -1,50 +1,31 @@
-package com.yyyu.user.pojo;
+package com.yyyu.user.pojo.vo;
 
-import com.fasterxml.jackson.annotation.JsonView;
 import io.swagger.annotations.ApiModelProperty;
 
-import java.util.Date;
+/**
+ * 功能：用户请求参数
+ *
+ * @author yu
+ * @date 2018/1/26.
+ */
+public class UserVo {
 
-public class MallUser {
-
-    //不含密码、密保、问题
-    public interface UserReturn {}
-
-
-    public interface UserDetail extends UserReturn{}
-
-    private Long userId;
-
+    @ApiModelProperty(value = "用户名" ,required = true)
     private String username;
-
-    @JsonView(UserDetail.class)
+    @ApiModelProperty(value = "密码" ,required = true)
     private String password;
-
+    @ApiModelProperty(value = "手机号码")
     private String phone;
-
+    @ApiModelProperty(value = "邮箱")
     private String email;
-
+    @ApiModelProperty(value = "用户状态 1-可用 2-禁止")
     private Short status;
-
-    @JsonView(UserDetail.class)
+    @ApiModelProperty(value = "密保问题")
     private String question;
-
-    @JsonView(UserDetail.class)
+    @ApiModelProperty(value = "密保答案")
     private String answer;
 
-    @JsonView(UserDetail.class)
-    private Date createTime;
 
-    @JsonView(UserDetail.class)
-    private Date updateTime;
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
 
     public String getUsername() {
         return username;
@@ -100,21 +81,5 @@ public class MallUser {
 
     public void setAnswer(String answer) {
         this.answer = answer;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
     }
 }

@@ -1,4 +1,4 @@
-package com.yyyu.mmall.controller;
+package com.yyyu.mmall.uitls.controller;
 
 /**
  * 功能：

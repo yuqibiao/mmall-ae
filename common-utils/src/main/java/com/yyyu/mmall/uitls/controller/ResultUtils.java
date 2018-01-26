@@ -1,4 +1,4 @@
-package com.yyyu.mmall.controller;
+package com.yyyu.mmall.uitls.controller;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
@@ -46,6 +46,11 @@ public class ResultUtils<T> implements Serializable {
     public static<T>  ResultUtils createSuccess(T data){
 
         return new ResultUtils<T>(ResultCode.SUCCESS.getCode() , data);
+    }
+
+    public static <T>ResultUtils createSuccess(String msg){
+
+        return new ResultUtils<T>(ResultCode.SUCCESS.getCode() ,msg);
     }
 
     public static <T>ResultUtils createSuccess(String msg , T data){

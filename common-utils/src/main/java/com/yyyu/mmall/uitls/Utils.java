@@ -1,4 +1,4 @@
-package com.yyyu.mmall;
+package com.yyyu.mmall.uitls;
 
 /**
  * 功能：
