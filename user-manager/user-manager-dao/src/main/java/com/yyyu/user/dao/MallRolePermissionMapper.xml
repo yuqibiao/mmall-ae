@@ -120,7 +120,34 @@
       <include refid="Example_Where_Clause" />
     </if>
   </select>
-  <update id="updateByExampleSelective" parameterType="map" >
+
+
+  <resultMap id="PermissionResult" type="com.yyyu.user.pojo.MallPermission" >
+    <id column="permission_id" property="permissionId" jdbcType="INTEGER" />
+    <result column="parent_id" property="parentId" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="SMALLINT" />
+    <result column="code" property="code" jdbcType="SMALLINT" />
+    <result column="target" property="target" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="SMALLINT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+    <select id="selectPermissionByRoleId" resultMap="PermissionResult" parameterType="integer">
+SELECT mall_permission.permission_id, mall_permission.parent_id, mall_permission.name,
+  mall_permission.description, mall_permission.status, mall_permission.code,
+  mall_permission.target, mall_permission.type, mall_permission.create_time,
+  mall_permission.update_time
+FROM mall_permission , mall_role_permission , mall_role
+WHERE mall_role.role_id = mall_role_permission.role_id
+      AND mall_permission.permission_id = mall_role_permission.permission_id
+      AND mall_role.role_id = #{roleId};
+    </select>
+
+
+    <update id="updateByExampleSelective" parameterType="map" >
     update mall_role_permission
     <set >
       <if test="record.permissionId != null" >

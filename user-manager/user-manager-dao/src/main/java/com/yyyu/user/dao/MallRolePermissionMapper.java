@@ -1,5 +1,6 @@
 package com.yyyu.user.dao;
 
+import com.yyyu.user.pojo.MallPermission;
 import com.yyyu.user.pojo.MallRolePermissionExample;
 import com.yyyu.user.pojo.MallRolePermissionKey;
 import java.util.List;
@@ -21,4 +22,6 @@ public interface MallRolePermissionMapper {
     int updateByExampleSelective(@Param("record") MallRolePermissionKey record, @Param("example") MallRolePermissionExample example);
 
     int updateByExample(@Param("record") MallRolePermissionKey record, @Param("example") MallRolePermissionExample example);
+
+    List<MallPermission> selectPermissionByRoleId(Integer roleId);
 }

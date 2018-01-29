@@ -19,8 +19,19 @@ public interface UserServiceInter{
      */
     void addUser(MallUser user);
 
+
     /**
      * 根据Id删除用户
+     *
+     * 真正意义上的删除
+     * @param userId
+     */
+    void reallyDeleteUserById(Long userId);
+
+    /**
+     * 根据Id删除用户
+     *
+     * 设置status状态为2（禁止）、不是真正意义上的删除
      * @param userId
      */
     void deleteUserById(Long userId);

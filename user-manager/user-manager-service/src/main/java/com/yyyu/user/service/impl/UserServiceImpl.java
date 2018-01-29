@@ -25,12 +25,21 @@ public class UserServiceImpl implements UserServiceInter{
 
     @Override
     public void addUser(MallUser user) {
-        userMapper.insert(user);
+        userMapper.insertSelective(user);
+    }
+
+    @Override
+    public void reallyDeleteUserById(Long userId) {
+        userMapper.deleteByPrimaryKey(userId);
     }
 
     @Override
     public void deleteUserById(Long userId) {
-        userMapper.deleteByPrimaryKey(userId);
+        MallUser user = new MallUser();
+        user.setUserId(userId);
+        short status = 2;
+        user.setStatus(status);
+        userMapper.updateByPrimaryKeySelective(user);
     }
 
     @Override

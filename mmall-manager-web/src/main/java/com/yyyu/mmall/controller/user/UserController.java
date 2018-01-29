@@ -1,4 +1,4 @@
-package com.yyyu.mmall.controller;
+package com.yyyu.mmall.controller.user;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.github.pagehelper.PageInfo;
@@ -26,6 +26,23 @@ public class UserController {
     @Autowired
     private UserServiceInter userService;
 
+    @ApiOperation(value = "删除用户",
+            notes = "不是真正意义的删除、只是将status状态设置为2",
+            httpMethod = "DELETE",
+            produces=MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "v1/users/{userId}", method = RequestMethod.DELETE)
+    @ResponseBody
+    public ResultUtils deleteUser(@ApiParam(value = "用户id"  , required = true) @PathVariable  Long userId){
+
+        try {
+            userService.deleteUserById(userId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultUtils.createError(e.getMessage());
+        }
+
+        return ResultUtils.createSuccess("删除成功");
+    }
 
     @ApiOperation(value = "添加用户",
             notes = "传入用户id",

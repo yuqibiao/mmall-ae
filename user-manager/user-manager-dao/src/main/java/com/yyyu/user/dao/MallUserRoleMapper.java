@@ -1,5 +1,6 @@
 package com.yyyu.user.dao;
 
+import com.yyyu.user.pojo.MallRole;
 import com.yyyu.user.pojo.MallUserRoleExample;
 import com.yyyu.user.pojo.MallUserRoleKey;
 import java.util.List;
@@ -21,4 +22,6 @@ public interface MallUserRoleMapper {
     int updateByExampleSelective(@Param("record") MallUserRoleKey record, @Param("example") MallUserRoleExample example);
 
     int updateByExample(@Param("record") MallUserRoleKey record, @Param("example") MallUserRoleExample example);
+
+    List<MallRole> selectRoleByUserId(Long userId);
 }

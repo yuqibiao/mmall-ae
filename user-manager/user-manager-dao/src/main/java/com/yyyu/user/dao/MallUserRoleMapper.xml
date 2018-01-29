@@ -120,7 +120,26 @@
       <include refid="Example_Where_Clause" />
     </if>
   </select>
-  <update id="updateByExampleSelective" parameterType="map" >
+
+    <resultMap id="RoleResult" type="com.yyyu.user.pojo.MallRole" >
+        <id column="role_id" property="roleId" jdbcType="INTEGER" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="code" property="code" jdbcType="SMALLINT" />
+        <result column="description" property="description" jdbcType="VARCHAR" />
+        <result column="status" property="status" jdbcType="SMALLINT" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <select id="selectRoleByUserId" resultMap="RoleResult" parameterType="Long">
+      SELECT mall_role.role_id ,mall_role.name , mall_role.code , mall_role.description,mall_role.status , mall_role.create_time ,mall_role.update_time
+      FROM mall_role ,mall_user_role ,  mall_user
+      WHERE mall_user.user_id = mall_user_role.user_id
+          AND mall_role.role_id =mall_user_role.role_id
+          AND mall_user.user_id = #{userId}
+    </select>
+
+    <update id="updateByExampleSelective" parameterType="map" >
     update mall_user_role
     <set >
       <if test="record.roleId != null" >
