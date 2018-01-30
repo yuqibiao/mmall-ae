@@ -25,10 +25,12 @@ public class ProductServiceImpl implements ProductServiceInter{
     private MallProductMapper mallProductMapper;
 
     @Override
-    public PageInfo<MallProductWithBLOBs> selectMallProductByPage(Integer start, Integer size) {
+    public PageInfo<MallProduct> selectProductPageByCategoryId(Long categoryId , Integer start, Integer size) {
         PageHelper.offsetPage(start , size);
-        List<MallProductWithBLOBs> mallProductWithBLOBs = mallProductMapper.selectByExampleWithBLOBs(new MallProductExample());
-        return new PageInfo<>(mallProductWithBLOBs);
+        MallProductExample example = new MallProductExample();
+        example.createCriteria().andCategoryIdEqualTo(categoryId);
+        List<MallProduct> mallProducts = mallProductMapper.selectByExample(example);
+        return new PageInfo<>(mallProducts);
     }
 
     @Override

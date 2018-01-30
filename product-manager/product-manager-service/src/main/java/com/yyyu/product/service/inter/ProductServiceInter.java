@@ -17,11 +17,12 @@ public interface ProductServiceInter {
     /**
      * 分页查询商品信息
      *
+     * @param  categoryId
      * @param start
      * @param size
      * @return
      */
-    PageInfo<MallProductWithBLOBs> selectMallProductByPage(Integer start , Integer size);
+    PageInfo<MallProduct> selectProductPageByCategoryId(Long categoryId , Integer start , Integer size);
 
     /**
      * 根据商品id查询商品的信息

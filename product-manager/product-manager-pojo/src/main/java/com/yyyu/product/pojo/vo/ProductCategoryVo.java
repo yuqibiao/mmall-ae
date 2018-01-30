@@ -1,5 +1,7 @@
 package com.yyyu.product.pojo.vo;
 
+import io.swagger.annotations.ApiModelProperty;
+
 /**
  * 功能：
  *
@@ -8,12 +10,16 @@ package com.yyyu.product.pojo.vo;
  */
 public class ProductCategoryVo {
 
+    @ApiModelProperty("父商品类别Id")
     private Long parentId;
 
+    @ApiModelProperty("商品类别名称")
     private String name;
 
+    @ApiModelProperty("状态")
     private Short status;
 
+    @ApiModelProperty("编码")
     private Short code;
 
     public ProductCategoryVo() {

@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="com.yyyu.product.pojo.MallCart" >
     <id column="cart_Id" property="cartId" jdbcType="BIGINT" />
     <result column="user_id" property="userId" jdbcType="BIGINT" />
-    <result column="product_id" property="productId" jdbcType="BIGINT" />
+    <result column="product_id" property="productIdList" jdbcType="BIGINT" />
     <result column="quantity" property="quantity" jdbcType="INTEGER" />
     <result column="checked" property="checked" jdbcType="SMALLINT" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
@@ -105,7 +105,7 @@
     insert into mall_cart (cart_Id, user_id, product_id, 
       quantity, checked, create_time, 
       update_time)
-    values (#{cartId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{productId,jdbcType=BIGINT}, 
+    values (#{cartId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{productIdList,jdbcType=BIGINT},
       #{quantity,jdbcType=INTEGER}, #{checked,jdbcType=SMALLINT}, #{createTime,jdbcType=TIMESTAMP}, 
       #{updateTime,jdbcType=TIMESTAMP})
   </insert>
@@ -118,7 +118,7 @@
       <if test="userId != null" >
         user_id,
       </if>
-      <if test="productId != null" >
+      <if test="productIdList != null" >
         product_id,
       </if>
       <if test="quantity != null" >
@@ -141,8 +141,8 @@
       <if test="userId != null" >
         #{userId,jdbcType=BIGINT},
       </if>
-      <if test="productId != null" >
-        #{productId,jdbcType=BIGINT},
+      <if test="productIdList != null" >
+        #{productIdList,jdbcType=BIGINT},
       </if>
       <if test="quantity != null" >
         #{quantity,jdbcType=INTEGER},
@@ -164,7 +164,34 @@
       <include refid="Example_Where_Clause" />
     </if>
   </select>
-  <update id="updateByExampleSelective" parameterType="map" >
+
+
+  <resultMap id="CartProduct" type="com.yyyu.product.pojo.bean.CartProduct" >
+    <id column="cart_Id" property="cartId" jdbcType="BIGINT" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="product_id" property="productIdList" jdbcType="BIGINT" />
+    <result column="quantity" property="quantity" jdbcType="INTEGER" />
+    <result column="checked" property="checked" jdbcType="SMALLINT" />
+    <result column="category_id" property="categoryId" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="subtitle" property="subtitle" jdbcType="VARCHAR" />
+    <result column="main_image" property="mainImage" jdbcType="VARCHAR" />
+    <result column="price" property="price" jdbcType="DECIMAL" />
+    <result column="stock" property="stock" jdbcType="BIGINT" />
+    <result column="status" property="status" jdbcType="SMALLINT" />
+  </resultMap>
+
+    <select id="selectAllCartProductByUserId" resultMap="CartProduct" parameterType="Long">
+SELECT mall_product.product_id , mall_product.category_id , mall_product.name ,
+  mall_product.subtitle , mall_product.main_image , mall_product.price ,
+  mall_product.stock ,mall_product.status , mall_cart.cart_Id , mall_cart.quantity,
+  mall_cart.checked
+FROM mall_cart , mall_product
+WHERE mall_product .product_id = mall_cart.product_id
+      AND mall_cart.user_id=#{userId}
+    </select>
+
+    <update id="updateByExampleSelective" parameterType="map" >
     update mall_cart
     <set >
       <if test="record.cartId != null" >
@@ -173,8 +200,8 @@
       <if test="record.userId != null" >
         user_id = #{record.userId,jdbcType=BIGINT},
       </if>
-      <if test="record.productId != null" >
-        product_id = #{record.productId,jdbcType=BIGINT},
+      <if test="record.productIdList != null" >
+        product_id = #{record.productIdList,jdbcType=BIGINT},
       </if>
       <if test="record.quantity != null" >
         quantity = #{record.quantity,jdbcType=INTEGER},
@@ -197,7 +224,7 @@
     update mall_cart
     set cart_Id = #{record.cartId,jdbcType=BIGINT},
       user_id = #{record.userId,jdbcType=BIGINT},
-      product_id = #{record.productId,jdbcType=BIGINT},
+      product_id = #{record.productIdList,jdbcType=BIGINT},
       quantity = #{record.quantity,jdbcType=INTEGER},
       checked = #{record.checked,jdbcType=SMALLINT},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -212,8 +239,8 @@
       <if test="userId != null" >
         user_id = #{userId,jdbcType=BIGINT},
       </if>
-      <if test="productId != null" >
-        product_id = #{productId,jdbcType=BIGINT},
+      <if test="productIdList != null" >
+        product_id = #{productIdList,jdbcType=BIGINT},
       </if>
       <if test="quantity != null" >
         quantity = #{quantity,jdbcType=INTEGER},
@@ -233,7 +260,7 @@
   <update id="updateByPrimaryKey" parameterType="com.yyyu.product.pojo.MallCart" >
     update mall_cart
     set user_id = #{userId,jdbcType=BIGINT},
-      product_id = #{productId,jdbcType=BIGINT},
+      product_id = #{productIdList,jdbcType=BIGINT},
       quantity = #{quantity,jdbcType=INTEGER},
       checked = #{checked,jdbcType=SMALLINT},
       create_time = #{createTime,jdbcType=TIMESTAMP},

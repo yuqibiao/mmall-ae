@@ -15,6 +15,13 @@ public interface ProductCategoryServiceInter {
 
 
     /**
+     * 得到所有商品分类信息
+     *
+     * @return
+     */
+    List<MallProductCategory> selectAllProductCategory();
+
+    /**
      * 分页得到商品分类信息
      *
      * @param start
@@ -60,5 +67,4 @@ public interface ProductCategoryServiceInter {
      * @param mallProductCategory
      */
     void addProductCategory(MallProductCategory mallProductCategory);
-
 }

@@ -3,6 +3,8 @@ package com.yyyu.product.dao;
 import com.yyyu.product.pojo.MallCart;
 import com.yyyu.product.pojo.MallCartExample;
 import java.util.List;
+
+import com.yyyu.product.pojo.bean.CartProduct;
 import org.apache.ibatis.annotations.Param;
 
 public interface MallCartMapper {
@@ -27,4 +29,6 @@ public interface MallCartMapper {
     int updateByPrimaryKeySelective(MallCart record);
 
     int updateByPrimaryKey(MallCart record);
+
+    List<CartProduct> selectAllCartProductByUserId(Long userId);
 }

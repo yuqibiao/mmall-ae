@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.yyyu.product.dao.MallProductMapper" >
   <resultMap id="BaseResultMap" type="com.yyyu.product.pojo.MallProduct" >
-    <id column="product_id" property="productId" jdbcType="BIGINT" />
+    <id column="product_id" property="productIdList" jdbcType="BIGINT" />
     <result column="category_id" property="categoryId" jdbcType="BIGINT" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="subtitle" property="subtitle" jdbcType="VARCHAR" />
@@ -118,11 +118,11 @@
     ,
     <include refid="Blob_Column_List" />
     from mall_product
-    where product_id = #{productId,jdbcType=BIGINT}
+    where product_id = #{productIdList,jdbcType=BIGINT}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from mall_product
-    where product_id = #{productId,jdbcType=BIGINT}
+    where product_id = #{productIdList,jdbcType=BIGINT}
   </delete>
   <delete id="deleteByExample" parameterType="com.yyyu.product.pojo.MallProductExample" >
     delete from mall_product
@@ -136,7 +136,7 @@
       stock, status, create_time, 
       update_time, sub_image, detail
       )
-    values (#{productId,jdbcType=BIGINT}, #{categoryId,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, 
+    values (#{productIdList,jdbcType=BIGINT}, #{categoryId,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR},
       #{subtitle,jdbcType=VARCHAR}, #{mainImage,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL}, 
       #{stock,jdbcType=BIGINT}, #{status,jdbcType=SMALLINT}, #{createTime,jdbcType=TIMESTAMP}, 
       #{updateTime,jdbcType=TIMESTAMP}, #{subImage,jdbcType=LONGVARCHAR}, #{detail,jdbcType=LONGVARCHAR}
@@ -145,7 +145,7 @@
   <insert id="insertSelective" parameterType="com.yyyu.product.pojo.MallProductWithBLOBs" >
     insert into mall_product
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="productId != null" >
+      <if test="productIdList != null" >
         product_id,
       </if>
       <if test="categoryId != null" >
@@ -183,8 +183,8 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="productId != null" >
-        #{productId,jdbcType=BIGINT},
+      <if test="productIdList != null" >
+        #{productIdList,jdbcType=BIGINT},
       </if>
       <if test="categoryId != null" >
         #{categoryId,jdbcType=BIGINT},
@@ -230,8 +230,8 @@
   <update id="updateByExampleSelective" parameterType="map" >
     update mall_product
     <set >
-      <if test="record.productId != null" >
-        product_id = #{record.productId,jdbcType=BIGINT},
+      <if test="record.productIdList != null" >
+        product_id = #{record.productIdList,jdbcType=BIGINT},
       </if>
       <if test="record.categoryId != null" >
         category_id = #{record.categoryId,jdbcType=BIGINT},
@@ -273,7 +273,7 @@
   </update>
   <update id="updateByExampleWithBLOBs" parameterType="map" >
     update mall_product
-    set product_id = #{record.productId,jdbcType=BIGINT},
+    set product_id = #{record.productIdList,jdbcType=BIGINT},
       category_id = #{record.categoryId,jdbcType=BIGINT},
       name = #{record.name,jdbcType=VARCHAR},
       subtitle = #{record.subtitle,jdbcType=VARCHAR},
@@ -291,7 +291,7 @@
   </update>
   <update id="updateByExample" parameterType="map" >
     update mall_product
-    set product_id = #{record.productId,jdbcType=BIGINT},
+    set product_id = #{record.productIdList,jdbcType=BIGINT},
       category_id = #{record.categoryId,jdbcType=BIGINT},
       name = #{record.name,jdbcType=VARCHAR},
       subtitle = #{record.subtitle,jdbcType=VARCHAR},
@@ -342,7 +342,7 @@
         detail = #{detail,jdbcType=LONGVARCHAR},
       </if>
     </set>
-    where product_id = #{productId,jdbcType=BIGINT}
+    where product_id = #{productIdList,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.yyyu.product.pojo.MallProductWithBLOBs" >
     update mall_product
@@ -357,7 +357,7 @@
       update_time = #{updateTime,jdbcType=TIMESTAMP},
       sub_image = #{subImage,jdbcType=LONGVARCHAR},
       detail = #{detail,jdbcType=LONGVARCHAR}
-    where product_id = #{productId,jdbcType=BIGINT}
+    where product_id = #{productIdList,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.yyyu.product.pojo.MallProduct" >
     update mall_product
@@ -370,6 +370,6 @@
       status = #{status,jdbcType=SMALLINT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP}
-    where product_id = #{productId,jdbcType=BIGINT}
+    where product_id = #{productIdList,jdbcType=BIGINT}
   </update>
 </mapper>

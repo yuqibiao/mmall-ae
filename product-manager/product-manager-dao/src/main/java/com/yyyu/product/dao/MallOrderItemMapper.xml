@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="com.yyyu.product.pojo.MallOrderItem" >
     <id column="order_item_id" property="orderItemId" jdbcType="BIGINT" />
     <result column="order_Id" property="orderId" jdbcType="BIGINT" />
-    <result column="product_id" property="productId" jdbcType="BIGINT" />
+    <result column="product_id" property="productIdList" jdbcType="BIGINT" />
     <result column="quantity" property="quantity" jdbcType="INTEGER" />
     <result column="current_unit_price" property="currentUnitPrice" jdbcType="DECIMAL" />
     <result column="product_name" property="productName" jdbcType="VARCHAR" />
@@ -110,7 +110,7 @@
       quantity, current_unit_price, product_name, 
       product_image, total_price, create_time, 
       update_time)
-    values (#{orderItemId,jdbcType=BIGINT}, #{orderId,jdbcType=BIGINT}, #{productId,jdbcType=BIGINT}, 
+    values (#{orderItemId,jdbcType=BIGINT}, #{orderId,jdbcType=BIGINT}, #{productIdList,jdbcType=BIGINT},
       #{quantity,jdbcType=INTEGER}, #{currentUnitPrice,jdbcType=DECIMAL}, #{productName,jdbcType=VARCHAR}, 
       #{productImage,jdbcType=VARCHAR}, #{totalPrice,jdbcType=DECIMAL}, #{createTime,jdbcType=TIMESTAMP}, 
       #{updateTime,jdbcType=TIMESTAMP})
@@ -124,7 +124,7 @@
       <if test="orderId != null" >
         order_Id,
       </if>
-      <if test="productId != null" >
+      <if test="productIdList != null" >
         product_id,
       </if>
       <if test="quantity != null" >
@@ -156,8 +156,8 @@
       <if test="orderId != null" >
         #{orderId,jdbcType=BIGINT},
       </if>
-      <if test="productId != null" >
-        #{productId,jdbcType=BIGINT},
+      <if test="productIdList != null" >
+        #{productIdList,jdbcType=BIGINT},
       </if>
       <if test="quantity != null" >
         #{quantity,jdbcType=INTEGER},
@@ -197,8 +197,8 @@
       <if test="record.orderId != null" >
         order_Id = #{record.orderId,jdbcType=BIGINT},
       </if>
-      <if test="record.productId != null" >
-        product_id = #{record.productId,jdbcType=BIGINT},
+      <if test="record.productIdList != null" >
+        product_id = #{record.productIdList,jdbcType=BIGINT},
       </if>
       <if test="record.quantity != null" >
         quantity = #{record.quantity,jdbcType=INTEGER},
@@ -230,7 +230,7 @@
     update mall_order_item
     set order_item_id = #{record.orderItemId,jdbcType=BIGINT},
       order_Id = #{record.orderId,jdbcType=BIGINT},
-      product_id = #{record.productId,jdbcType=BIGINT},
+      product_id = #{record.productIdList,jdbcType=BIGINT},
       quantity = #{record.quantity,jdbcType=INTEGER},
       current_unit_price = #{record.currentUnitPrice,jdbcType=DECIMAL},
       product_name = #{record.productName,jdbcType=VARCHAR},
@@ -248,8 +248,8 @@
       <if test="orderId != null" >
         order_Id = #{orderId,jdbcType=BIGINT},
       </if>
-      <if test="productId != null" >
-        product_id = #{productId,jdbcType=BIGINT},
+      <if test="productIdList != null" >
+        product_id = #{productIdList,jdbcType=BIGINT},
       </if>
       <if test="quantity != null" >
         quantity = #{quantity,jdbcType=INTEGER},
@@ -278,7 +278,7 @@
   <update id="updateByPrimaryKey" parameterType="com.yyyu.product.pojo.MallOrderItem" >
     update mall_order_item
     set order_Id = #{orderId,jdbcType=BIGINT},
-      product_id = #{productId,jdbcType=BIGINT},
+      product_id = #{productIdList,jdbcType=BIGINT},
       quantity = #{quantity,jdbcType=INTEGER},
       current_unit_price = #{currentUnitPrice,jdbcType=DECIMAL},
       product_name = #{productName,jdbcType=VARCHAR},

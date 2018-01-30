@@ -24,6 +24,16 @@ public class ProductCategoryServiceImpl implements ProductCategoryServiceInter{
     private MallProductCategoryMapper productCategoryMapper;
 
     @Override
+    public List<MallProductCategory> selectAllProductCategory() {
+
+        MallProductCategoryExample example = new MallProductCategoryExample();
+        example.setDistinct(false);
+        List<MallProductCategory> mallProductCategories = productCategoryMapper.selectByExample(example);
+
+        return mallProductCategories;
+    }
+
+    @Override
     public PageInfo<MallProductCategory> selectProductCategoryByPage(Integer start, Integer size) {
 
         PageHelper.offsetPage(start , size);
