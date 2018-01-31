@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2018/1/26 17:07:42                           */
+/* Created on:     2018/1/31 15:45:15                           */
 /*==============================================================*/
 
 
@@ -75,10 +75,10 @@ create table mall_order
    order_Id             bigint not null auto_increment,
    user_id              bigint comment '用户Id',
    logistics_id         bigint,
-   order_no             bigint(20) not null,
+   order_no             varchar(32) not null,
    payment              decimal(20,2) not null,
    payment_type         smallint,
-   postage              decimal,
+   postage              decimal(10,2),
    status               smallint,
    payment_time         datetime,
    send_time            datetime,

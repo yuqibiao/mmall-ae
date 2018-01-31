@@ -5,7 +5,7 @@
     <id column="order_Id" property="orderId" jdbcType="BIGINT" />
     <result column="user_id" property="userId" jdbcType="BIGINT" />
     <result column="logistics_id" property="logisticsId" jdbcType="BIGINT" />
-    <result column="order_no" property="orderNo" jdbcType="BIGINT" />
+    <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
     <result column="payment" property="payment" jdbcType="DECIMAL" />
     <result column="payment_type" property="paymentType" jdbcType="SMALLINT" />
     <result column="postage" property="postage" jdbcType="DECIMAL" />
@@ -217,6 +217,11 @@
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
+  </select>
+  <select id="getAutoIncrement" resultType="java.lang.Long">
+    SELECT auto_increment
+    FROM information_schema.`TABLES`
+    WHERE TABLE_SCHEMA='mmall' AND TABLE_NAME='mall_order';
   </select>
   <update id="updateByExampleSelective" parameterType="map" >
     update mall_order

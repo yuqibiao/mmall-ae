@@ -31,4 +31,8 @@ public interface MallCartMapper {
     int updateByPrimaryKey(MallCart record);
 
     List<CartProduct> selectAllCartProductByUserId(Long userId);
+
+    void updateUncheckedAllByUserId(Long userId);
+
+    void updateCheckedAllByUserId(Long userId);
 }

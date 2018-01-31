@@ -4,7 +4,9 @@ import com.github.pagehelper.PageInfo;
 import com.yyyu.product.pojo.MallProduct;
 import com.yyyu.product.pojo.MallProductWithBLOBs;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 功能：
@@ -13,6 +15,8 @@ import java.util.List;
  * @date 2018/1/29.
  */
 public interface ProductServiceInter {
+
+    Map<Long, MallProduct> selectProductsMap(List<Long> productIdList);
 
     /**
      * 分页查询商品信息

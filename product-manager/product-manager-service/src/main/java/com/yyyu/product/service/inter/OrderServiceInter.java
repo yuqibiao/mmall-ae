@@ -2,6 +2,8 @@ package com.yyyu.product.service.inter;
 
 import com.github.pagehelper.PageInfo;
 import com.yyyu.product.pojo.MallOrder;
+import com.yyyu.product.pojo.vo.OrderVo;
+import org.springframework.core.annotation.Order;
 
 import java.util.List;
 
@@ -47,8 +49,8 @@ public interface OrderServiceInter {
     /**
      * 添加订单
      *
-     * @param order
+     * @param orderVo
      */
-    void addOrder(MallOrder order);
+    void addOrder(OrderVo orderVo);
 
 }

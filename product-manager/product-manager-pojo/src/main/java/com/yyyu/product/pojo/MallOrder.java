@@ -10,13 +10,13 @@ public class MallOrder {
 
     private Long logisticsId;
 
-    private Long orderNo;
+    private String orderNo;
 
     private BigDecimal payment;
 
     private Short paymentType;
 
-    private Long postage;
+    private BigDecimal postage;
 
     private Short status;
 
@@ -56,13 +56,6 @@ public class MallOrder {
         this.logisticsId = logisticsId;
     }
 
-    public Long getOrderNo() {
-        return orderNo;
-    }
-
-    public void setOrderNo(Long orderNo) {
-        this.orderNo = orderNo;
-    }
 
     public BigDecimal getPayment() {
         return payment;
@@ -80,11 +73,15 @@ public class MallOrder {
         this.paymentType = paymentType;
     }
 
-    public Long getPostage() {
+    public void setOrderNo(String orderNo) {
+        this.orderNo = orderNo;
+    }
+
+    public BigDecimal getPostage() {
         return postage;
     }
 
-    public void setPostage(Long postage) {
+    public void setPostage(BigDecimal postage) {
         this.postage = postage;
     }
 

@@ -267,4 +267,26 @@ WHERE mall_product .product_id = mall_cart.product_id
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where cart_Id = #{cartId,jdbcType=BIGINT}
   </update>
+    <update id="updateUncheckedAllByUserId" parameterType="Long">
+      update mall_cart
+      <set >
+      <if test="checked != null" >
+        checked = false
+      </if>
+      </set>
+      where checked = true
+          and user_id=#{userId}
+    </update>
+
+  <update id="updateCheckedAllByUserId">
+    update mall_cart
+    <set >
+      <if test="checked != null" >
+        checked = true
+      </if>
+    </set>
+    where checked = false
+    and user_id=#{userId}
+  </update>
+
 </mapper>

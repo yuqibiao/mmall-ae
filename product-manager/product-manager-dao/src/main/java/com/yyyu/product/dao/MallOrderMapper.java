@@ -27,4 +27,6 @@ public interface MallOrderMapper {
     int updateByPrimaryKeySelective(MallOrder record);
 
     int updateByPrimaryKey(MallOrder record);
+
+    Long getAutoIncrement();
 }

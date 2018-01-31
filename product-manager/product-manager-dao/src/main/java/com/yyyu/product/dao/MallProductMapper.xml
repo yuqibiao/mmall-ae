@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.yyyu.product.dao.MallProductMapper" >
   <resultMap id="BaseResultMap" type="com.yyyu.product.pojo.MallProduct" >
-    <id column="product_id" property="productIdList" jdbcType="BIGINT" />
+    <id column="product_id" property="productId" jdbcType="BIGINT" />
     <result column="category_id" property="categoryId" jdbcType="BIGINT" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="subtitle" property="subtitle" jdbcType="VARCHAR" />

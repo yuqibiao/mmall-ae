@@ -10,7 +10,10 @@ import com.yyyu.product.service.inter.ProductServiceInter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 功能：
@@ -23,6 +26,22 @@ public class ProductServiceImpl implements ProductServiceInter{
 
     @Autowired
     private MallProductMapper mallProductMapper;
+
+    @Override
+    public Map<Long, MallProduct> selectProductsMap(List<Long> productIdList) {
+
+        Map<Long, MallProduct> priceMap = new HashMap<>();
+        MallProductExample example = new MallProductExample();
+        example.createCriteria().andProductIdIn(productIdList);
+        List<MallProduct> mallProducts = mallProductMapper.selectByExample(example);
+        for (MallProduct product: mallProducts) {
+            Long productId = product.getProductId();
+            BigDecimal price = product.getPrice();
+            priceMap.put(productId , product);
+        }
+
+        return priceMap;
+    }
 
     @Override
     public PageInfo<MallProduct> selectProductPageByCategoryId(Long categoryId , Integer start, Integer size) {

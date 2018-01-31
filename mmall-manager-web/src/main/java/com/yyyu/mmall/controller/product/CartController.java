@@ -2,6 +2,7 @@ package com.yyyu.mmall.controller.product;
 
 import com.yyyu.mmall.uitls.controller.ResultUtils;
 import com.yyyu.product.pojo.MallCart;
+import com.yyyu.product.pojo.bean.CartProductInfo;
 import com.yyyu.product.pojo.vo.CartDeleteVo;
 import com.yyyu.product.pojo.vo.CartVo;
 import com.yyyu.product.service.inter.CartServiceInter;
@@ -10,14 +11,12 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 功能：购物车相关api
  *
+ * TODO  添加登录成功或token验证
  * @author yu
  * @date 2018/1/30.
  */
@@ -30,20 +29,85 @@ public class CartController {
     @Autowired
     private CartServiceInter cartService;
 
+    @ApiOperation(value = "取消勾选某一商品" ,notes = "取消单个商品的勾选",httpMethod = "PATCH")
+    @RequestMapping(value = "v1/unchecked/users/{userId}/products/{productId}" , method = RequestMethod.PATCH)
+    @ResponseBody
+    public ResultUtils uncheckedProductByProductId(@PathVariable  Long userId , @PathVariable Long productId){
+
+        CartProductInfo cartProductInfo;
+        try {
+            cartProductInfo = cartService.updateUncheckedProductByProductId(userId , productId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultUtils.createError(e.getMessage());
+        }
+
+        return ResultUtils.createSuccess(cartProductInfo);
+    }
+
+
+    @ApiOperation(value = "勾选某一商品" ,notes = "单个商品的勾选",httpMethod = "PATCH")
+    @RequestMapping(value = "v1/checked/users/{userId}/products/{productId}" , method = RequestMethod.PATCH)
+    @ResponseBody
+    public ResultUtils checkedProductByProductId(@PathVariable  Long userId , @PathVariable Long productId){
+
+        CartProductInfo cartProductInfo;
+        try {
+            cartProductInfo = cartService.updateCheckedProductByProductId(userId , productId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultUtils.createError(e.getMessage());
+        }
+
+        return ResultUtils.createSuccess(cartProductInfo);
+    }
+
+    @ApiOperation(value = "商品全部勾选" ,notes = "勾选上全部的商品",httpMethod = "PATCH")
+    @RequestMapping(value = "v1/checked_all/users/{userId}" , method = RequestMethod.PATCH)
+    @ResponseBody
+    public ResultUtils checkedAll(@PathVariable  Long userId){
+
+        CartProductInfo cartProductInfo;
+        try {
+            cartProductInfo = cartService.updateCheckedAll(userId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultUtils.createError(e.getMessage());
+        }
+
+        return ResultUtils.createSuccess(cartProductInfo);
+    }
+
+    @ApiOperation(value = "商品全部不勾选" ,notes = "取消全部商品的勾选",httpMethod = "PATCH")
+    @RequestMapping(value = "v1/unchecked_all/users/{userId}" , method = RequestMethod.PATCH)
+    @ResponseBody
+    public ResultUtils uncheckedAll(@PathVariable  Long userId){
+
+        CartProductInfo cartProductInfo;
+        try {
+            cartProductInfo = cartService.updateUncheckedAll(userId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultUtils.createError(e.getMessage());
+        }
+
+        return ResultUtils.createSuccess(cartProductInfo);
+    }
 
     @ApiOperation(value = "删除购物车" ,notes = "删除某一用户对应的购物车中的商品",httpMethod = "DELETE")
     @RequestMapping(value = "v1/carts" , method = RequestMethod.DELETE)
     @ResponseBody
     public ResultUtils deleteCart(@RequestBody CartDeleteVo cartDeleteVo){
 
+        CartProductInfo cartProductInfo;
         try {
-            cartService.deleteCart(cartDeleteVo);
+            cartProductInfo = cartService.deleteCart(cartDeleteVo);
         } catch (Exception e) {
             e.printStackTrace();
             return ResultUtils.createError(e.getMessage());
         }
 
-        return ResultUtils.createSuccess("添加成功");
+        return ResultUtils.createSuccess("添加成功" , cartProductInfo);
     }
 
     @ApiOperation(value = "添加商品到购物车" , httpMethod = "POST")
