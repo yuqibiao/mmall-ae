@@ -86,7 +86,7 @@ public class OrderServiceImpl implements OrderServiceInter {
             BigDecimal classGoodsPrice = BigDecimalUtil.mul(price.doubleValue(), quantity);
             totalPrice = totalPrice.add(classGoodsPrice);
         }
-        Long autoInc  = orderMapper.getAutoIncrement();//orderId
+        //Long autoInc  = orderMapper.getAutoIncrement();//orderId
         MallOrder order = new MallOrder();
         order.setOrderNo(generateOrderNo()); //设置订单号
         order.setUserId(orderVo.getUserId());
@@ -95,7 +95,8 @@ public class OrderServiceImpl implements OrderServiceInter {
         order.setPayment(totalPrice);
         order.setPostage(getPostage());
         //1.生成主单
-        Long orderId = orderMapper.insertSelective(order);
+        orderMapper.insertSelective(order);
+        Long orderId = order.getOrderId();//dao层中被赋值了
         //2.生成子单 TODO
         for (CartVo cartVo: cartList) {
             Long productId = cartVo.getProductId();

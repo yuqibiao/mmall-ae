@@ -14,7 +14,7 @@ public interface MallOrderMapper {
 
     int insert(MallOrder record);
 
-    Long insertSelective(MallOrder record);
+    Integer insertSelective(MallOrder record);
 
     List<MallOrder> selectByExample(MallOrderExample example);
 
