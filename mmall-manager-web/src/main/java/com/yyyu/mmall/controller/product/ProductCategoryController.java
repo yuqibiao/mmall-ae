@@ -67,10 +67,10 @@ public class ProductCategoryController {
     @ApiOperation(value = "更新商品分类" , httpMethod = "PATCH")
     @RequestMapping(value = "v1/categories" , method = RequestMethod.PATCH)
     @ResponseBody
-    public ResultUtils updateProductCategory(@RequestBody ProductCategoryVo categoryVo){
+    public ResultUtils updateProductCategory(@RequestBody ProductCategoryUpdateVo productCategoryUpdateVo){
 
         try {
-            productCategoryService.updateProductCategory(setCategory(categoryVo));
+            productCategoryService.updateProductCategory(setCategory(productCategoryUpdateVo));
         } catch (Exception e) {
             e.printStackTrace();
             return ResultUtils.createError(e.getMessage());

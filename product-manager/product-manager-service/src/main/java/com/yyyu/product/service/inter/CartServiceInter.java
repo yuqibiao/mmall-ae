@@ -15,6 +15,13 @@ import java.util.List;
  */
 public interface CartServiceInter {
 
+    /**
+     * 得到购物车商品信息
+     *
+     * @param userId
+     * @return
+     */
+    CartProductInfo getCartProductInfo(Long userId);
 
     /**
      * 取消勾选某一商品

@@ -59,7 +59,7 @@ public class ProductServiceImpl implements ProductServiceInter{
 
     @Override
     public void updateProduct(MallProductWithBLOBs product) {
-        mallProductMapper.updateByExampleSelective(product , new MallProductExample());
+        mallProductMapper.updateByPrimaryKeySelective(product);
     }
 
     @Override

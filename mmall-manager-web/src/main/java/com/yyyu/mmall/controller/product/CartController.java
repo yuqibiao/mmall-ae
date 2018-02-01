@@ -2,16 +2,20 @@ package com.yyyu.mmall.controller.product;
 
 import com.yyyu.mmall.uitls.controller.ResultUtils;
 import com.yyyu.product.pojo.MallCart;
+import com.yyyu.product.pojo.bean.CartProduct;
 import com.yyyu.product.pojo.bean.CartProductInfo;
 import com.yyyu.product.pojo.vo.CartDeleteVo;
 import com.yyyu.product.pojo.vo.CartVo;
 import com.yyyu.product.service.inter.CartServiceInter;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * 功能：购物车相关api
@@ -29,10 +33,27 @@ public class CartController {
     @Autowired
     private CartServiceInter cartService;
 
+    @ApiOperation(value = "查看用户的购物车" ,notes = "根据用户Id查询所有购物车中的商品信息",httpMethod = "GET")
+    @RequestMapping(value = "v1/users/{userId}/products/all" , method = RequestMethod.GET)
+    @ResponseBody
+    public ResultUtils uncheckedProductByProductId(@ApiParam(value = "用户id" , required = true)@PathVariable  Long userId) {
+
+        CartProductInfo cartProductInfo;
+        try {
+            cartProductInfo = cartService.getCartProductInfo(userId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultUtils.createError(e.getMessage());
+        }
+
+        return ResultUtils.createSuccess(cartProductInfo);
+    }
+
     @ApiOperation(value = "取消勾选某一商品" ,notes = "取消单个商品的勾选",httpMethod = "PATCH")
     @RequestMapping(value = "v1/unchecked/users/{userId}/products/{productId}" , method = RequestMethod.PATCH)
     @ResponseBody
-    public ResultUtils uncheckedProductByProductId(@PathVariable  Long userId , @PathVariable Long productId){
+    public ResultUtils uncheckedProductByProductId(@ApiParam(value = "用户id" , required = true) @PathVariable  Long userId ,
+                                                   @ApiParam(value = "商品d" , required = true)@PathVariable Long productId){
 
         CartProductInfo cartProductInfo;
         try {
@@ -49,7 +70,8 @@ public class CartController {
     @ApiOperation(value = "勾选某一商品" ,notes = "单个商品的勾选",httpMethod = "PATCH")
     @RequestMapping(value = "v1/checked/users/{userId}/products/{productId}" , method = RequestMethod.PATCH)
     @ResponseBody
-    public ResultUtils checkedProductByProductId(@PathVariable  Long userId , @PathVariable Long productId){
+    public ResultUtils checkedProductByProductId(@ApiParam(value = "用户id" , required = true) @PathVariable  Long userId ,
+                                                 @ApiParam(value = "商品d" , required = true)@PathVariable Long productId){
 
         CartProductInfo cartProductInfo;
         try {
@@ -65,7 +87,7 @@ public class CartController {
     @ApiOperation(value = "商品全部勾选" ,notes = "勾选上全部的商品",httpMethod = "PATCH")
     @RequestMapping(value = "v1/checked_all/users/{userId}" , method = RequestMethod.PATCH)
     @ResponseBody
-    public ResultUtils checkedAll(@PathVariable  Long userId){
+    public ResultUtils checkedAll(@ApiParam(value = "用户id" , required = true) @PathVariable  Long userId){
 
         CartProductInfo cartProductInfo;
         try {
@@ -81,7 +103,7 @@ public class CartController {
     @ApiOperation(value = "商品全部不勾选" ,notes = "取消全部商品的勾选",httpMethod = "PATCH")
     @RequestMapping(value = "v1/unchecked_all/users/{userId}" , method = RequestMethod.PATCH)
     @ResponseBody
-    public ResultUtils uncheckedAll(@PathVariable  Long userId){
+    public ResultUtils uncheckedAll(@ApiParam(value = "用户id" , required = true) @PathVariable  Long userId){
 
         CartProductInfo cartProductInfo;
         try {
@@ -107,7 +129,7 @@ public class CartController {
             return ResultUtils.createError(e.getMessage());
         }
 
-        return ResultUtils.createSuccess("添加成功" , cartProductInfo);
+        return ResultUtils.createSuccess("删除成功" , cartProductInfo);
     }
 
     @ApiOperation(value = "添加商品到购物车" , httpMethod = "POST")

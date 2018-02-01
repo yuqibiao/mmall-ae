@@ -17,8 +17,6 @@ public class OrderVo {
 
     private Long logisticsId;
 
-    private BigDecimal payment;
-
     private Short paymentType;
 
     //传入要购买商品的信息、由后台生成价格、运费等信息
@@ -46,15 +44,6 @@ public class OrderVo {
 
     public void setLogisticsId(Long logisticsId) {
         this.logisticsId = logisticsId;
-    }
-
-
-    public BigDecimal getPayment() {
-        return payment;
-    }
-
-    public void setPayment(BigDecimal payment) {
-        this.payment = payment;
     }
 
     public Short getPaymentType() {

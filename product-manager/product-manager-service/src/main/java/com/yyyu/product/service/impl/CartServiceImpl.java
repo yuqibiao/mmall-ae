@@ -31,10 +31,12 @@ public class CartServiceImpl implements CartServiceInter{
         //1.设置checked=true
         MallCart mallCart = new MallCart();
         mallCart.setProductId(productId);
-        short checked = 2;//false
+        short checked = 0;//false
         mallCart.setChecked(checked);
         MallCartExample example = new MallCartExample();
-        example.createCriteria().andUserIdEqualTo(userId);
+        example.createCriteria()
+                .andProductIdEqualTo(productId)
+                .andUserIdEqualTo(userId);
         cartMapper.updateByExampleSelective(mallCart,example);
 
         return getCartProductInfo(userId);
@@ -49,7 +51,9 @@ public class CartServiceImpl implements CartServiceInter{
         short checked = 1;//true
         mallCart.setChecked(checked);
         MallCartExample example = new MallCartExample();
-        example.createCriteria().andUserIdEqualTo(userId);
+        example.createCriteria()
+                .andProductIdEqualTo(productId)
+                .andUserIdEqualTo(userId);
         cartMapper.updateByExampleSelective(mallCart,example);
 
         return getCartProductInfo(userId);
@@ -73,18 +77,23 @@ public class CartServiceImpl implements CartServiceInter{
         return getCartProductInfo(userId);
     }
 
-    private CartProductInfo getCartProductInfo(Long userId) {
+    @Override
+    public CartProductInfo getCartProductInfo(Long userId) {
         CartProductInfo cartProductInfo = new CartProductInfo();
         //2.得到全部商品
         List<CartProduct> cartProducts = selectAllCartProductByUserId(userId);
         cartProductInfo.setCartProductList(cartProducts);
         //3.计算总价格
         BigDecimal totalPrice = new BigDecimal(Double.toString(0));
+        cartProductInfo.setCheckedAll(true);
         for (CartProduct cartProduct :cartProducts) {
             if(cartProduct.getChecked()==1){//勾选
                 Integer quantity = cartProduct.getQuantity();
                 BigDecimal price = cartProduct.getPrice();
-                totalPrice.add(BigDecimalUtil.mul(price.doubleValue() , quantity));
+                BigDecimal classGoods = BigDecimalUtil.mul(price.doubleValue(), quantity);
+                totalPrice = totalPrice.add(classGoods);
+            }else{
+                cartProductInfo.setCheckedAll(false);
             }
         }
         cartProductInfo.setTotalPerice(totalPrice);
@@ -134,8 +143,9 @@ public class CartServiceImpl implements CartServiceInter{
         if(mallCarts==null || mallCarts.size()==0){//没添加（insert）
             cartMapper.insertSelective(cart);
         }else{//添加了(更新quantity)
-            MallCart cart1 = mallCarts.get(0);
-            cart1.setQuantity(cart.getQuantity()+cart1.getQuantity());
+            MallCart cart1 = new MallCart();
+            cart1.setCartId(mallCarts.get(0).getCartId());
+            cart1.setQuantity(cart.getQuantity()+mallCarts.get(0).getQuantity());
             cartMapper.updateByPrimaryKeySelective(cart1);
         }
 

@@ -83,7 +83,8 @@ public class OrderServiceImpl implements OrderServiceInter {
             Long productId = cartVo.getProductId();
             Integer quantity = cartVo.getQuantity();
             BigDecimal price = priceMap.get(productId).getPrice();
-            totalPrice.add(BigDecimalUtil.mul(price.doubleValue() , quantity));
+            BigDecimal classGoodsPrice = BigDecimalUtil.mul(price.doubleValue(), quantity);
+            totalPrice = totalPrice.add(classGoodsPrice);
         }
         Long autoInc  = orderMapper.getAutoIncrement();//orderId
         MallOrder order = new MallOrder();
@@ -94,14 +95,14 @@ public class OrderServiceImpl implements OrderServiceInter {
         order.setPayment(totalPrice);
         order.setPostage(getPostage());
         //1.生成主单
-        orderMapper.insertSelective(order);
+        Long orderId = orderMapper.insertSelective(order);
         //2.生成子单 TODO
         for (CartVo cartVo: cartList) {
             Long productId = cartVo.getProductId();
             Integer quantity = cartVo.getQuantity();
             MallProduct product = priceMap.get(productId);
             MallOrderItem orderItem = new MallOrderItem();
-            orderItem.setOrderId(autoInc);
+            orderItem.setOrderId(orderId);
             orderItem.setProductId(productId);
             orderItem.setQuantity(quantity);
             orderItem.setCurrentUnitPrice(product.getPrice());
