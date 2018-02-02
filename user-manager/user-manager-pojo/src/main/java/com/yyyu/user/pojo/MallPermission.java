@@ -19,6 +19,8 @@ public class MallPermission {
 
     private Short type;
 
+    private String icon;
+
     private Date createTime;
 
     private Date updateTime;
@@ -85,6 +87,14 @@ public class MallPermission {
 
     public void setType(Short type) {
         this.type = type;
+    }
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
     }
 
     public Date getCreateTime() {

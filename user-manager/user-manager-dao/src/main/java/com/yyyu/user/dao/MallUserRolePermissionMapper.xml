@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yyyu.user.dao.MallUserRolePermissionMapper">
+
+    <resultMap id="BaseResultMap" type="com.yyyu.user.pojo.MallPermission">
+        <id column="permission_id" property="permissionId" jdbcType="INTEGER"/>
+        <result column="parent_id" property="parentId" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="description" property="description" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="SMALLINT"/>
+        <result column="code" property="code" jdbcType="SMALLINT"/>
+        <result column="target" property="target" jdbcType="VARCHAR"/>
+        <result column="type" property="type" jdbcType="SMALLINT"/>
+        <result column="icon" property="icon" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <select id="selectMenusByUserId" resultMap="BaseResultMap" parameterType="Long">
+      SELECT mall_permission.permission_id , mall_permission.parent_id , mall_permission.name  , mall_permission.target,mall_permission.icon
+      FROM  mall_user , mall_user_role , mall_role , mall_role_permission , mall_permission
+      WHERE  mall_user.user_id=#{userId}
+            AND mall_permission.type=0
+            AND mall_user.user_id = mall_user_role.user_id AND mall_user_role.role_id = mall_role.role_id
+            AND mall_role.role_id = mall_role_permission.role_id AND  mall_role_permission.permission_id = mall_permission.permission_id
+      ORDER BY mall_permission.code;
+    </select>
+
+
+</mapper>
