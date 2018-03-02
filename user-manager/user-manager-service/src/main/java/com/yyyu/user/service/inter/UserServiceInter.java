@@ -2,6 +2,7 @@ package com.yyyu.user.service.inter;
 
 import com.github.pagehelper.PageInfo;
 import com.yyyu.user.pojo.MallUser;
+import com.yyyu.user.pojo.MallUserExample;
 
 import java.util.List;
 
@@ -44,6 +45,14 @@ public interface UserServiceInter{
     void updateUser(MallUser user);
 
     /**
+     *根据用户名查询用户
+     *
+     * @param username
+     * @return
+     */
+    List<MallUser> selectByUsername(String username);
+
+    /**
      * 根据Id查询用户
      * @param userId
      * @return
@@ -56,6 +65,12 @@ public interface UserServiceInter{
      * @param to
      * @return
      */
-    PageInfo<MallUser> selectUserByPage(Integer from, Integer to) ;
+    PageInfo<MallUser> selectUserByPage(Integer from, Integer to , MallUserExample mallUserExample) ;
 
+    /**
+     * 批量删除用户
+     *
+     * @param userIdList
+     */
+    void reallyDeleteUserByIdList(List<Long> userIdList);
 }

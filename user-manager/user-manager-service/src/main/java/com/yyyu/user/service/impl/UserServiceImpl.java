@@ -48,17 +48,26 @@ public class UserServiceImpl implements UserServiceInter{
     }
 
     @Override
+    public List<MallUser> selectByUsername(String username) {
+        return userMapper.selectByUsername(username);
+    }
+
+    @Override
     public MallUser selectByUserId(Long userId) {
 
         return userMapper.selectByPrimaryKey(userId);
     }
 
     @Override
-    public PageInfo<MallUser> selectUserByPage(Integer start, Integer size) {
-        MallUserExample mallUserExample = new MallUserExample();
+    public PageInfo<MallUser> selectUserByPage(Integer start, Integer size , MallUserExample mallUserExample) {
         mallUserExample.setDistinct(false);
         PageHelper.offsetPage(start , size);
         List<MallUser> mallUsers = userMapper.selectByExample(mallUserExample);
         return new PageInfo<>(mallUsers);
+    }
+
+    @Override
+    public void reallyDeleteUserByIdList(List<Long> userIdList) {
+        userMapper.deleteUserByIdList(userIdList);
     }
 }

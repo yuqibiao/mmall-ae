@@ -2,6 +2,10 @@ package com.yyyu.user.service.inter;
 
 import com.github.pagehelper.PageInfo;
 import com.yyyu.user.pojo.MallRole;
+import com.yyyu.user.pojo.MallRoleExample;
+import com.yyyu.user.pojo.MallUserExample;
+
+import java.util.List;
 
 /**
  * 功能：角色相关操作接口
@@ -19,7 +23,7 @@ public interface RoleServiceInter {
      * @param size
      * @return
      */
-    PageInfo<MallRole> selectRoleByPage(Integer start , Integer size);
+    PageInfo<MallRole> selectRoleByPage(Integer start , Integer size , MallRoleExample roleExample);
 
     /**
      * 根据roleId查询角色
@@ -59,4 +63,10 @@ public interface RoleServiceInter {
      */
     void addRole(MallRole role);
 
+    /**
+     * 批量删除角色
+     *
+     * @param roleIdList
+     */
+    void reallyDeleteRoleByIdList(List<Integer> roleIdList);
 }

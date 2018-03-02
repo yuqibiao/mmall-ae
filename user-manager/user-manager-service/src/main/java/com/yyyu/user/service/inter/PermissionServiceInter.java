@@ -2,6 +2,7 @@ package com.yyyu.user.service.inter;
 
 import com.github.pagehelper.PageInfo;
 import com.yyyu.user.pojo.MallPermission;
+import com.yyyu.user.pojo.MallPermissionExample;
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ public interface PermissionServiceInter {
      * @param size
      * @return
      */
-    PageInfo<MallPermission> selectPermissionByPage(Integer start , Integer size);
+    PageInfo<MallPermission> selectPermissionByPage(Integer start , Integer size , MallPermissionExample permissionExample );
 
     /**
      * 根据permissionId查询权限信息
@@ -60,4 +61,10 @@ public interface PermissionServiceInter {
      */
     void addPermission(MallPermission permission);
 
+    /**
+     * 批量删除权限
+     *
+     * @param roleIdList
+     */
+    void reallyDeletePermissionByIdList(List<Integer> permissionList);
 }

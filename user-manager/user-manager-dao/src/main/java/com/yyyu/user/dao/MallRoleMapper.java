@@ -27,4 +27,6 @@ public interface MallRoleMapper {
     int updateByPrimaryKeySelective(MallRole record);
 
     int updateByPrimaryKey(MallRole record);
+
+    void reallyDeleteRoleByIdList(List<Integer> roleIdList);
 }

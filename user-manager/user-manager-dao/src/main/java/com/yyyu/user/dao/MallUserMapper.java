@@ -27,4 +27,8 @@ public interface MallUserMapper {
     int updateByPrimaryKeySelective(MallUser record);
 
     int updateByPrimaryKey(MallUser record);
+
+    List<MallUser> selectByUsername(String username);
+
+    void deleteUserByIdList(List<Long> userIdList);
 }

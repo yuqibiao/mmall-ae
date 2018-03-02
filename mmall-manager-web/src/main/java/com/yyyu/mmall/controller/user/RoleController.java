@@ -1,8 +1,11 @@
 package com.yyyu.mmall.controller.user;
 
 import com.github.pagehelper.PageInfo;
+import com.yyyu.mmall.controller.BaseController;
 import com.yyyu.mmall.uitls.controller.ResultUtils;
+import com.yyyu.mmall.uitls.lang.StringUtils;
 import com.yyyu.user.pojo.MallRole;
+import com.yyyu.user.pojo.MallRoleExample;
 import com.yyyu.user.pojo.vo.RoleUpdateVo;
 import com.yyyu.user.pojo.vo.RoleVo;
 import com.yyyu.user.service.inter.RoleServiceInter;
@@ -13,6 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * 功能：角色相关操作api
@@ -25,7 +31,7 @@ import org.springframework.web.bind.annotation.*;
         produces = MediaType.APPLICATION_JSON_VALUE)
 @RequestMapping("api/role")
 @Controller
-public class RoleController {
+public class RoleController extends BaseController {
 
     @Autowired
     private RoleServiceInter roleService;
@@ -34,11 +40,23 @@ public class RoleController {
     @RequestMapping("v1/roles")
     @ResponseBody
     public ResultUtils getRoleByPage(@ApiParam(value = "从第几行开始区数据")  @RequestParam(defaultValue = "0") Integer start ,
-                                     @ApiParam(value = "取数据的条数") @RequestParam(defaultValue = "10")  Integer size){
+                                     @ApiParam(value = "取数据的条数") @RequestParam(defaultValue = "10")  Integer size,
+                                     HttpServletRequest request){
 
         PageInfo<MallRole> mallRolePageInfo ;
         try {
-            mallRolePageInfo = roleService.selectRoleByPage(start, size);
+            String sort = getParameterUtf8(request , "sort");
+            String order =  getParameterUtf8(request , "order");
+            String roleName = getParameterUtf8(request , "name");
+            MallRoleExample roleExample = new MallRoleExample();
+            String orderByClause = genOrderByClause(sort, order);
+            if (!StringUtils.isEmpty(orderByClause)){
+                roleExample.setOrderByClause(orderByClause);
+            }
+            if(!StringUtils.isEmpty(roleName)){
+                roleExample.createCriteria().andNameLike("%"+roleName+"%");
+            }
+            mallRolePageInfo = roleService.selectRoleByPage(start, size , roleExample);
         } catch (Exception e) {
             e.printStackTrace();
             return ResultUtils.createError(e.getMessage());
@@ -78,13 +96,30 @@ public class RoleController {
         return ResultUtils.createSuccess("更新成功");
     }
 
+    @ApiOperation(value = "批量删除角色",
+            httpMethod = "POST",
+            produces=MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "v1/roles:delete", method = RequestMethod.POST)
+    @ResponseBody
+    public ResultUtils deleteUser(@RequestBody List<Integer> roleIdList){
+
+        try {
+            roleService.reallyDeleteRoleByIdList(roleIdList);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultUtils.createError(e.getMessage());
+        }
+
+        return ResultUtils.createSuccess("删除成功");
+    }
+
     @ApiOperation(value = "根据roleId删除角色", notes = "传入角色Id" , httpMethod = "DELETE")
     @RequestMapping(value = "v1/roles/{roleId}" , method = RequestMethod.DELETE)
     @ResponseBody
     public ResultUtils deleteRole(@ApiParam(value = "角色id" ,required = true) @PathVariable  Integer roleId){
 
         try {
-            roleService.deleteRole(roleId);
+            roleService.reallyDeleteRole(roleId);
         } catch (Exception e) {
             e.printStackTrace();
             return ResultUtils.createError(e.getMessage());

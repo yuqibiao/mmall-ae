@@ -1,6 +1,7 @@
 package com.yyyu.mmall.controller.product;
 
 import com.github.pagehelper.PageInfo;
+import com.yyyu.mmall.controller.BaseController;
 import com.yyyu.mmall.uitls.controller.ResultUtils;
 import com.yyyu.product.pojo.MallProduct;
 import com.yyyu.product.pojo.MallProductWithBLOBs;
@@ -25,7 +26,7 @@ import org.springframework.web.bind.annotation.*;
         produces = MediaType.APPLICATION_JSON_VALUE)
 @RequestMapping("api/product")
 @Controller
-public class ProductController {
+public class ProductController extends BaseController{
 
     @Autowired
     private ProductServiceInter productService;

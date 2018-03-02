@@ -1,5 +1,6 @@
 package com.yyyu.mmall.controller.product;
 
+import com.yyyu.mmall.controller.BaseController;
 import com.yyyu.mmall.uitls.controller.ResultUtils;
 import com.yyyu.product.pojo.MallCart;
 import com.yyyu.product.pojo.bean.CartProduct;
@@ -28,7 +29,7 @@ import java.util.List;
         produces = MediaType.APPLICATION_JSON_VALUE)
 @RequestMapping("api/cart")
 @Controller
-public class CartController {
+public class CartController extends BaseController{
 
     @Autowired
     private CartServiceInter cartService;

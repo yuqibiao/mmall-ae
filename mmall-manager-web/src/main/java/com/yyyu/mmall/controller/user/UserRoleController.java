@@ -1,5 +1,6 @@
 package com.yyyu.mmall.controller.user;
 
+import com.yyyu.mmall.controller.BaseController;
 import com.yyyu.mmall.uitls.controller.ResultUtils;
 import com.yyyu.user.pojo.MallRole;
 import com.yyyu.user.service.inter.UserRoleServiceInter;
@@ -26,7 +27,7 @@ import java.util.List;
         produces = MediaType.APPLICATION_JSON_VALUE)
 @RequestMapping("api")
 @Controller
-public class UserRoleController {
+public class UserRoleController extends BaseController{
 
     @Autowired
     private UserRoleServiceInter userRoleService;

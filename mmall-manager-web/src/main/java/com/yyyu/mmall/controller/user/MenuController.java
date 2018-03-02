@@ -1,5 +1,6 @@
 package com.yyyu.mmall.controller.user;
 
+import com.yyyu.mmall.controller.BaseController;
 import com.yyyu.mmall.uitls.controller.ResultUtils;
 import com.yyyu.user.pojo.bean.MenuBean;
 import com.yyyu.user.service.inter.PermissionServiceInter;
@@ -27,7 +28,7 @@ import java.util.List;
         produces = MediaType.APPLICATION_JSON_VALUE)
 @RequestMapping("api/admin/menu")
 @Controller
-public class MenuController {
+public class MenuController extends BaseController{
 
     @Autowired
     private UserRolePermissionInter userRolePermission;

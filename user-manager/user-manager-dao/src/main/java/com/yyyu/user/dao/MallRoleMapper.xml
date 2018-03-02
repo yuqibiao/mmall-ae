@@ -101,7 +101,14 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.yyyu.user.pojo.MallRole" >
+    <delete id="reallyDeleteRoleByIdList" parameterType="java.util.List">
+      delete from mall_role
+      where role_id in
+      <foreach collection="list" item="roleId" open="(" close=")" separator="," >
+        #{roleId}
+      </foreach>
+    </delete>
+    <insert id="insert" parameterType="com.yyyu.user.pojo.MallRole" >
     insert into mall_role (role_id, name, code, 
       description, status, create_time, 
       update_time)

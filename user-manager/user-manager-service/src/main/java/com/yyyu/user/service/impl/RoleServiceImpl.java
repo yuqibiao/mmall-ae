@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.yyyu.user.dao.MallRoleMapper;
 import com.yyyu.user.pojo.MallRole;
 import com.yyyu.user.pojo.MallRoleExample;
+import com.yyyu.user.pojo.MallUserExample;
 import com.yyyu.user.service.inter.RoleServiceInter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,8 +25,7 @@ public class RoleServiceImpl implements RoleServiceInter{
     private MallRoleMapper roleMapper;
 
     @Override
-    public PageInfo<MallRole> selectRoleByPage(Integer start, Integer size) {
-        MallRoleExample roleExample = new MallRoleExample();
+    public PageInfo<MallRole> selectRoleByPage(Integer start, Integer size , MallRoleExample roleExample) {
         roleExample.setDistinct(false);
         PageHelper.offsetPage(start , size);
         List<MallRole> mallRoles = roleMapper.selectByExample(roleExample);
@@ -59,5 +59,10 @@ public class RoleServiceImpl implements RoleServiceInter{
     @Override
     public void addRole(MallRole role) {
         roleMapper.insertSelective(role);
+    }
+
+    @Override
+    public void reallyDeleteRoleByIdList(List<Integer> roleIdList) {
+        roleMapper.reallyDeleteRoleByIdList(roleIdList);
     }
 }

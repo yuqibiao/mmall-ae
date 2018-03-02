@@ -24,10 +24,9 @@ public class PermissionServiceImpl implements PermissionServiceInter{
     private MallPermissionMapper permissionMapper;
 
     @Override
-    public PageInfo<MallPermission> selectPermissionByPage(Integer start, Integer size) {
+    public PageInfo<MallPermission> selectPermissionByPage(Integer start, Integer size , MallPermissionExample permissionExample ) {
 
         PageHelper.offsetPage(start , size);
-        MallPermissionExample permissionExample = new MallPermissionExample();
         permissionExample.setDistinct(false);
         List<MallPermission> mallPermissions = permissionMapper.selectByExample(permissionExample);
 
@@ -61,6 +60,11 @@ public class PermissionServiceImpl implements PermissionServiceInter{
     @Override
     public void addPermission(MallPermission permission) {
         permissionMapper.insertSelective(permission);
+    }
+
+    @Override
+    public void reallyDeletePermissionByIdList(List<Integer> permissionList) {
+        permissionMapper.reallyDeletePermissionByIdList(permissionList);
     }
 
 }

@@ -72,7 +72,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    permission_id, parent_id, name, description, status, code, target, type, create_time, 
+    permission_id, parent_id, name, description, status, code, target, icon,type, create_time,
     update_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.yyyu.user.pojo.MallPermissionExample" >
@@ -105,7 +105,14 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.yyyu.user.pojo.MallPermission" >
+    <delete id="reallyDeletePermissionByIdList" parameterType="java.util.List">
+      delete from mall_permission
+      where permission_id in
+      <foreach collection="list" item="permissionId" open="("  separator="," close=")">
+        #{permissionId}
+      </foreach>
+    </delete>
+    <insert id="insert" parameterType="com.yyyu.user.pojo.MallPermission" >
     insert into mall_permission (permission_id, parent_id, name, 
       description, status, code, 
       target, type, create_time, 

@@ -1,5 +1,6 @@
 package com.yyyu.mmall.controller.product;
 
+import com.yyyu.mmall.controller.BaseController;
 import com.yyyu.mmall.uitls.controller.ResultUtils;
 import com.yyyu.product.pojo.vo.OrderVo;
 import com.yyyu.product.service.inter.OrderServiceInter;
@@ -23,7 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
         produces = MediaType.APPLICATION_JSON_VALUE)
 @RequestMapping("api/order")
 @Controller
-public class OrderController {
+public class OrderController extends BaseController{
 
     @Autowired
     private OrderServiceInter orderService;

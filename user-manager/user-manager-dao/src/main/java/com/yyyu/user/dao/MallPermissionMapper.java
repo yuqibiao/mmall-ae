@@ -27,4 +27,6 @@ public interface MallPermissionMapper {
     int updateByPrimaryKeySelective(MallPermission record);
 
     int updateByPrimaryKey(MallPermission record);
+
+    void reallyDeletePermissionByIdList(List<Integer> permissionList);
 }

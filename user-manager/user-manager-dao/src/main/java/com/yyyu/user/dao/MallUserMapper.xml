@@ -90,7 +90,7 @@
     </if>
   </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select 
+    select
     <include refid="Base_Column_List" />
     from mall_user
     where user_id = #{userId,jdbcType=BIGINT}
@@ -105,7 +105,14 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.yyyu.user.pojo.MallUser" >
+    <delete id="deleteUserByIdList" parameterType="java.util.List">
+      delete from mall_user
+      where user_id in
+      <foreach collection="list" item="userId" open="(" close=")" separator="," >
+        #{userId}
+      </foreach>
+    </delete>
+    <insert id="insert" parameterType="com.yyyu.user.pojo.MallUser" >
     insert into mall_user (user_id, username, password, 
       phone, email, status, 
       question, answer, create_time, 
@@ -188,7 +195,15 @@
       <include refid="Example_Where_Clause" />
     </if>
   </select>
-  <update id="updateByExampleSelective" parameterType="map" >
+
+    <select id="selectByUsername" resultMap="BaseResultMap" parameterType="String">
+      select
+      <include refid="Base_Column_List" />
+      from mall_user
+      where username=#{username}
+    </select>
+
+    <update id="updateByExampleSelective" parameterType="map" >
     update mall_user
     <set >
       <if test="record.userId != null" >

@@ -1,6 +1,7 @@
 package com.yyyu.mmall.controller.product;
 
 import com.github.pagehelper.PageInfo;
+import com.yyyu.mmall.controller.BaseController;
 import com.yyyu.mmall.uitls.controller.ResultUtils;
 import com.yyyu.product.pojo.MallProductCategory;
 import com.yyyu.product.pojo.vo.ProductCategoryUpdateVo;
@@ -26,7 +27,7 @@ import java.util.List;
         produces = MediaType.APPLICATION_JSON_VALUE)
 @RequestMapping("api/product")
 @Controller
-public class ProductCategoryController {
+public class ProductCategoryController extends BaseController{
 
     @Autowired
     private ProductCategoryServiceInter productCategoryService;
