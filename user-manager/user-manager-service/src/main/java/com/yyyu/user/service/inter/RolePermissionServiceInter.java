@@ -1,6 +1,8 @@
 package com.yyyu.user.service.inter;
 
 import com.yyyu.user.pojo.MallPermission;
+import com.yyyu.user.pojo.bean.ZTreeNode;
+import com.yyyu.user.pojo.vo.UpdateRolePermissionVo;
 
 import java.util.List;
 
@@ -12,6 +14,13 @@ import java.util.List;
  */
 public interface RolePermissionServiceInter {
 
+    /**
+     * 根据roleId得到所有权限
+     *
+     * @param roleId 所有的权限信息
+     * @return
+     */
+    List<ZTreeNode> selectAllPermissionByRoleId(Integer roleId);
 
     /**
      * 根据roleId查询角色对应的权限
@@ -36,4 +45,11 @@ public interface RolePermissionServiceInter {
      * @param permissionId
      */
     void addRolePermission(Integer roleId , Integer permissionId);
+
+    /**
+     * 更新角色的权限
+     *
+     * @param updateRolePermissionVo
+     */
+    void updateRolePermission(UpdateRolePermissionVo updateRolePermissionVo);
 }

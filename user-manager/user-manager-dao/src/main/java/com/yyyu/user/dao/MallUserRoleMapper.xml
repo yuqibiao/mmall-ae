@@ -114,7 +114,14 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.yyyu.user.pojo.MallUserRoleExample" resultType="java.lang.Integer" >
+    <insert id="insertRoleList" parameterType="com.yyyu.user.pojo.bean.UserRoleIdListBean">
+      insert into mall_user_role(user_id , role_id)
+      values
+      <foreach collection="roleIdList" item="roleId" separator=",">
+        (#{userId},#{roleId})
+      </foreach>
+    </insert>
+    <select id="countByExample" parameterType="com.yyyu.user.pojo.MallUserRoleExample" resultType="java.lang.Integer" >
     select count(*) from mall_user_role
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />

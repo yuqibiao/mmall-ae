@@ -84,7 +84,7 @@ public class PermissionController extends BaseController{
     @ApiOperation(value = "更新权限" , httpMethod = "PATCH")
     @RequestMapping(value = "v1/permissions" , method = RequestMethod.PATCH)
     @ResponseBody
-    public ResultUtils updatePermission(@RequestBody PermissionVo permissionVo){
+    public ResultUtils updatePermission(@RequestBody PermissionUpdateVo permissionVo){
 
         try {
             permissionService.updatePermission(setPermission(permissionVo));

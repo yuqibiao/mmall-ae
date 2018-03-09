@@ -69,4 +69,11 @@ public interface RoleServiceInter {
      * @param roleIdList
      */
     void reallyDeleteRoleByIdList(List<Integer> roleIdList);
+
+    /**
+     * 得到所有的角色
+     *
+     * @return
+     */
+    List<MallRole> selectAllRole();
 }

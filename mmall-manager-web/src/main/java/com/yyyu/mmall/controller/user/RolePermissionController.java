@@ -2,7 +2,8 @@ package com.yyyu.mmall.controller.user;
 
 import com.yyyu.mmall.controller.BaseController;
 import com.yyyu.mmall.uitls.controller.ResultUtils;
-import com.yyyu.user.pojo.MallPermission;
+import com.yyyu.user.pojo.bean.ZTreeNode;
+import com.yyyu.user.pojo.vo.UpdateRolePermissionVo;
 import com.yyyu.user.service.inter.RolePermissionServiceInter;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -10,10 +11,7 @@ import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -32,20 +30,36 @@ public class RolePermissionController extends BaseController{
     @Autowired
     private RolePermissionServiceInter rolePermissionService;
 
-    @ApiOperation(value = "查询某一角色的所有权限" , httpMethod = "GET")
-    @RequestMapping(value = "v1/roles/{roleId}/permissions" , method = RequestMethod.GET)
+    @ApiOperation(value = "查询所有的权限信息" , httpMethod = "GET")
+    @RequestMapping(value = "v1/permissions" , method = RequestMethod.GET)
     @ResponseBody
-    public ResultUtils getPermissionByRole(@ApiParam(value = "角色id" , required = true)@PathVariable  Integer roleId){
+    public ResultUtils getAllPermission(){
 
-        List<MallPermission> mallPermissions;
+        List<ZTreeNode> zTreeNodeList;
         try {
-            mallPermissions = rolePermissionService.selectPermissionByRoleId(roleId);
+            zTreeNodeList = rolePermissionService.selectAllPermissionByRoleId(0);
         } catch (Exception e) {
             e.printStackTrace();
             return ResultUtils.createError(e.getMessage());
         }
 
-        return ResultUtils.createSuccess(mallPermissions);
+        return ResultUtils.createSuccess(zTreeNodeList);
+    }
+
+    @ApiOperation(value = "查询某一角色的所有权限" , httpMethod = "GET")
+    @RequestMapping(value = "v1/roles/{roleId}/permissions" , method = RequestMethod.GET)
+    @ResponseBody
+    public ResultUtils getAllPermissionByRoleId(@ApiParam(value = "角色id" , required = true)@PathVariable  Integer roleId){
+
+        List<ZTreeNode> zTreeNodeList;
+        try {
+            zTreeNodeList = rolePermissionService.selectAllPermissionByRoleId(roleId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultUtils.createError(e.getMessage());
+        }
+
+        return ResultUtils.createSuccess(zTreeNodeList);
     }
 
 
@@ -63,6 +77,22 @@ public class RolePermissionController extends BaseController{
         }
 
         return ResultUtils.createSuccess("删除权限成功");
+    }
+
+    @ApiOperation(value = "更新用户的权限" , httpMethod = "PATCH")
+    @RequestMapping(value = "v1/roles/permissions:update" , method = RequestMethod.PATCH)
+    @ResponseBody
+    public ResultUtils updateRolePermission(@ApiParam(value = "更新信息" , required = true)@RequestBody   UpdateRolePermissionVo updateRolePermissionVo){
+
+        try {
+            //删除原来的添加新增的
+            rolePermissionService.updateRolePermission(updateRolePermissionVo );
+        } catch (Exception e) {
+            e.printStackTrace();
+            ResultUtils.createError(e.getMessage());
+        }
+
+        return ResultUtils.createSuccess("添加权限成功");
     }
 
     @ApiOperation(value = "给角色添加权限" , httpMethod = "POST")

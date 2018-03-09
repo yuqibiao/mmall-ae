@@ -91,7 +91,14 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.yyyu.user.pojo.MallRolePermissionKey" >
+
+  <!--根据roleId删除role对应的权限-->
+    <delete id="deleteByRoleId" parameterType="Integer">
+      delete from mall_role_permission
+      where role_id = #{roleId};
+    </delete>
+
+    <insert id="insert" parameterType="com.yyyu.user.pojo.MallRolePermissionKey" >
     insert into mall_role_permission (permission_id, role_id)
     values (#{permissionId,jdbcType=INTEGER}, #{roleId,jdbcType=INTEGER})
   </insert>
@@ -114,6 +121,16 @@
       </if>
     </trim>
   </insert>
+
+  <!--批量添加角色的权限-->
+  <insert id="addRolePermission" parameterType="com.yyyu.user.pojo.vo.UpdateRolePermissionVo">
+     insert into mall_role_permission (role_id , permission_id)
+     values
+     <foreach collection="permissionIdList" separator="," item="permissionId">
+       (#{roleId} , #{permissionId})
+     </foreach>
+  </insert>
+
   <select id="countByExample" parameterType="com.yyyu.user.pojo.MallRolePermissionExample" resultType="java.lang.Integer" >
     select count(*) from mall_role_permission
     <if test="_parameter != null" >

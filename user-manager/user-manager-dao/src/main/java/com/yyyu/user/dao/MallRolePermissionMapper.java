@@ -4,6 +4,8 @@ import com.yyyu.user.pojo.MallPermission;
 import com.yyyu.user.pojo.MallRolePermissionExample;
 import com.yyyu.user.pojo.MallRolePermissionKey;
 import java.util.List;
+
+import com.yyyu.user.pojo.vo.UpdateRolePermissionVo;
 import org.apache.ibatis.annotations.Param;
 
 public interface MallRolePermissionMapper {
@@ -24,4 +26,8 @@ public interface MallRolePermissionMapper {
     int updateByExample(@Param("record") MallRolePermissionKey record, @Param("example") MallRolePermissionExample example);
 
     List<MallPermission> selectPermissionByRoleId(Integer roleId);
+
+    void deleteByRoleId(Integer roleId);
+
+    void addRolePermission(UpdateRolePermissionVo updateRolePermissionVo);
 }

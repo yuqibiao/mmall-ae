@@ -65,4 +65,10 @@ public class RoleServiceImpl implements RoleServiceInter{
     public void reallyDeleteRoleByIdList(List<Integer> roleIdList) {
         roleMapper.reallyDeleteRoleByIdList(roleIdList);
     }
+
+    @Override
+    public List<MallRole> selectAllRole() {
+        List<MallRole> mallRoles = roleMapper.selectByExample(new MallRoleExample());
+        return mallRoles;
+    }
 }

@@ -4,6 +4,8 @@ import com.yyyu.user.pojo.MallRole;
 import com.yyyu.user.pojo.MallUserRoleExample;
 import com.yyyu.user.pojo.MallUserRoleKey;
 import java.util.List;
+
+import com.yyyu.user.pojo.bean.UserRoleIdListBean;
 import org.apache.ibatis.annotations.Param;
 
 public interface MallUserRoleMapper {
@@ -24,4 +26,6 @@ public interface MallUserRoleMapper {
     int updateByExample(@Param("record") MallUserRoleKey record, @Param("example") MallUserRoleExample example);
 
     List<MallRole> selectRoleByUserId(Long userId);
+
+    void insertRoleList(UserRoleIdListBean userRoleIdListBean);
 }

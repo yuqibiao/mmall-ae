@@ -65,6 +65,23 @@ public class RoleController extends BaseController {
         return ResultUtils.createSuccess(mallRolePageInfo);
     }
 
+
+    @ApiOperation(value = "得到所以的角色", httpMethod = "GET")
+    @RequestMapping(value = "v1/roles:all" , method = RequestMethod.GET)
+    @ResponseBody
+    public ResultUtils getAllRole(){
+
+        List<MallRole> roleList;
+        try {
+            roleList = roleService.selectAllRole();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultUtils.createError(e.getMessage());
+        }
+
+        return ResultUtils.createSuccess(roleList);
+    }
+
     @ApiOperation(value = "根据roleId查询角色信息", notes = "传入角色Id" , httpMethod = "GET")
     @RequestMapping(value = "v1/roles/{roleId}" , method = RequestMethod.GET)
     @ResponseBody

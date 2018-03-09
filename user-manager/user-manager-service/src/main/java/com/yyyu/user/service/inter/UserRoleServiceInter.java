@@ -1,6 +1,7 @@
 package com.yyyu.user.service.inter;
 
 import com.yyyu.user.pojo.MallRole;
+import com.yyyu.user.pojo.bean.RoleChecked;
 
 import java.util.List;
 
@@ -35,4 +36,20 @@ public interface UserRoleServiceInter {
      * @param roleId
      */
     void addUserRole(Long userId , Integer roleId);
+
+    /**
+     * 批量添加用户权限
+     *
+     * @param userId
+     * @param roleIdList
+     */
+    void addUserRoleList(Long userId, List<Integer> roleIdList);
+
+    /***
+     * 得到所有的权限信息 和用户对应的权限
+     *
+     * @param userId
+     * @return 用户有的权限 checked=true
+     */
+    List<RoleChecked> selectAllRoleByUserId(Long userId);
 }

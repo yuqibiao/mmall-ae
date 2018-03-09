@@ -7,8 +7,10 @@ import com.yyyu.mmall.uitls.controller.ResultUtils;
 import com.yyyu.mmall.uitls.lang.StringUtils;
 import com.yyyu.user.pojo.MallUser;
 import com.yyyu.user.pojo.MallUserExample;
+import com.yyyu.user.pojo.vo.UserAddVo;
 import com.yyyu.user.pojo.vo.UserUpdateVo;
 import com.yyyu.user.pojo.vo.UserVo;
+import com.yyyu.user.service.inter.UserRoleServiceInter;
 import com.yyyu.user.service.inter.UserServiceInter;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -34,6 +36,8 @@ public class UserController extends BaseController{
 
     @Autowired
     private UserServiceInter userService;
+    @Autowired
+    private UserRoleServiceInter userRoleService;
 
     @ApiOperation(value = "添加用户",
             notes = "传入json格式的用户信息的",
@@ -41,26 +45,26 @@ public class UserController extends BaseController{
             produces=MediaType.APPLICATION_JSON_VALUE)
     @RequestMapping(value = "v1/user" , method = RequestMethod.POST)
     @ResponseBody
-    public ResultUtils addUser(@ApiParam(value = "用户信息", required = true ) @RequestBody UserVo user){
+    public ResultUtils addUser(@ApiParam(value = "用户信息", required = true ) @RequestBody UserVo userVo){
 
         try {
 
             //查看用户名是否已经存在
-            List<MallUser> mallUsers = userService.selectByUsername(user.getUsername());
+            List<MallUser> mallUsers = userService.selectByUsername(userVo.getUsername());
             if (mallUsers.size()>0){
                 return ResultUtils.createError("该用户名已存在");
             }
 
             MallUser mallUser = new MallUser();
-            mallUser.setUsername(user.getUsername());
+            mallUser.setUsername(userVo.getUsername());
             //todo 加密
-            mallUser.setPassword(user.getPassword());
-            mallUser.setPhone(user.getPhone());
-            mallUser.setEmail(user.getEmail());
-            mallUser.setStatus(user.getStatus());
-            mallUser.setQuestion(user.getQuestion());
+            mallUser.setPassword(userVo.getPassword());
+            mallUser.setPhone(userVo.getPhone());
+            mallUser.setEmail(userVo.getEmail());
+            mallUser.setStatus(userVo.getStatus());
+            mallUser.setQuestion(userVo.getQuestion());
             // todo 加密
-            mallUser.setAnswer(user.getAnswer());
+            mallUser.setAnswer(userVo.getAnswer());
             userService.addUser(mallUser);
         } catch (Exception e) {
             e.printStackTrace();
