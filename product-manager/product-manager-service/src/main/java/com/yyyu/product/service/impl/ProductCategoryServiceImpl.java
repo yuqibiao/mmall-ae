@@ -34,12 +34,11 @@ public class ProductCategoryServiceImpl implements ProductCategoryServiceInter{
     }
 
     @Override
-    public PageInfo<MallProductCategory> selectProductCategoryByPage(Integer start, Integer size) {
+    public PageInfo<MallProductCategory> selectProductCategoryByPage(Integer start, Integer size , MallProductCategoryExample productCategoryExample) {
 
         PageHelper.offsetPage(start , size);
-        MallProductCategoryExample example = new MallProductCategoryExample();
-        example.setDistinct(false);
-        List<MallProductCategory> mallProductCategories = productCategoryMapper.selectByExample(example);
+        productCategoryExample.setDistinct(false);
+        List<MallProductCategory> mallProductCategories = productCategoryMapper.selectByExample(productCategoryExample);
 
         return new PageInfo<>(mallProductCategories);
     }
@@ -71,5 +70,14 @@ public class ProductCategoryServiceImpl implements ProductCategoryServiceInter{
     @Override
     public void addProductCategory(MallProductCategory mallProductCategory) {
         productCategoryMapper.insertSelective(mallProductCategory);
+    }
+
+    @Override
+    public void deleteProductCategoryIdList(List<Long> categoryIdList) {
+
+        MallProductCategoryExample categoryExample = new MallProductCategoryExample();
+        categoryExample.createCriteria().andCategoryIdIn(categoryIdList);
+        productCategoryMapper.deleteByExample(categoryExample);
+
     }
 }

@@ -2,6 +2,7 @@ package com.yyyu.product.service.inter;
 
 import com.github.pagehelper.PageInfo;
 import com.yyyu.product.pojo.MallProductCategory;
+import com.yyyu.product.pojo.MallProductCategoryExample;
 
 import java.util.List;
 
@@ -28,7 +29,7 @@ public interface ProductCategoryServiceInter {
      * @param size
      * @return
      */
-    PageInfo<MallProductCategory> selectProductCategoryByPage(Integer start , Integer size);
+    PageInfo<MallProductCategory> selectProductCategoryByPage(Integer start , Integer size , MallProductCategoryExample productCategoryExample);
 
     /**
      *根据分类id获得商品分类信息
@@ -67,4 +68,11 @@ public interface ProductCategoryServiceInter {
      * @param mallProductCategory
      */
     void addProductCategory(MallProductCategory mallProductCategory);
+
+    /**
+     * 批量删除商品分类
+     *
+     * @param categoryIdList
+     */
+    void deleteProductCategoryIdList(List<Long> categoryIdList);
 }

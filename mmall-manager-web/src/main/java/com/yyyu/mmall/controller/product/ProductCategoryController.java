@@ -3,10 +3,14 @@ package com.yyyu.mmall.controller.product;
 import com.github.pagehelper.PageInfo;
 import com.yyyu.mmall.controller.BaseController;
 import com.yyyu.mmall.uitls.controller.ResultUtils;
+import com.yyyu.mmall.uitls.lang.StringUtils;
 import com.yyyu.product.pojo.MallProductCategory;
+import com.yyyu.product.pojo.MallProductCategoryExample;
+import com.yyyu.product.pojo.MallProductCategoryWithParentName;
 import com.yyyu.product.pojo.vo.ProductCategoryUpdateVo;
 import com.yyyu.product.pojo.vo.ProductCategoryVo;
 import com.yyyu.product.service.inter.ProductCategoryServiceInter;
+import com.yyyu.user.pojo.bean.ZTreeNode;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -15,6 +19,8 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,30 +39,78 @@ public class ProductCategoryController extends BaseController{
     private ProductCategoryServiceInter productCategoryService;
 
     @ApiOperation(value = "查询所有商品分类" , httpMethod = "GET")
-    @RequestMapping(value = "v1/categories/all" , method = RequestMethod.GET)
+    @RequestMapping(value = "v1/categories:all" , method = RequestMethod.GET)
     @ResponseBody
     public ResultUtils getAllProductCategory(){
-
-        List<MallProductCategory> categoryList;
+        List<ZTreeNode> zTreeNodeList;
         try {
-            categoryList=  productCategoryService.selectAllProductCategory();
+
+            List<MallProductCategory> categoryList=  productCategoryService.selectAllProductCategory();
+            zTreeNodeList = new ArrayList<>();
+            for (MallProductCategory category:categoryList) {
+                ZTreeNode zTreeNode = new ZTreeNode();
+                zTreeNode.setId(category.getCategoryId());
+                zTreeNode.setpId(category.getParentId());
+                zTreeNode.setOpen(true);
+                zTreeNode.setName(category.getName());
+                zTreeNodeList.add(zTreeNode);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return ResultUtils.createError(e.getMessage());
         }
 
-        return ResultUtils.createSuccess(categoryList);
+        return ResultUtils.createSuccess(zTreeNodeList);
+    }
+
+    @ApiOperation(value = "根据Id查询商品分类" , httpMethod = "GET")
+    @RequestMapping(value = "v1/categories/{categoryId}" , method = RequestMethod.GET)
+    @ResponseBody
+    public ResultUtils getCategoryById(@ApiParam(value = "分类Id" ,required = true) @PathVariable Long categoryId){
+
+        MallProductCategoryWithParentName categoryWithParentName = new MallProductCategoryWithParentName();
+        try {
+            MallProductCategory category = productCategoryService.selectProductCategoryByCategoryId(categoryId);
+            Long parentId = category.getParentId();
+            MallProductCategory parentCategory  = productCategoryService.selectProductCategoryByCategoryId(parentId);
+            if(parentId!=null){
+                categoryWithParentName.setParentName(parentCategory.getName());
+            }
+            categoryWithParentName.setCategoryId(category.getCategoryId());
+            categoryWithParentName.setName(category.getName());
+            categoryWithParentName.setCode(category.getCode());
+            categoryWithParentName.setStatus(category.getStatus());
+            categoryWithParentName.setCreateTime(category.getCreateTime());
+            categoryWithParentName.setParentId(category.getParentId());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultUtils.createError(e.getMessage());
+        }
+
+        return ResultUtils.createSuccess(categoryWithParentName);
     }
 
     @ApiOperation(value = "分页查询商品分类" , httpMethod = "GET")
     @RequestMapping(value = "v1/categories" , method = RequestMethod.GET)
     @ResponseBody
     public ResultUtils getProductCategoryByPage(@ApiParam(value = "从第几行开始区数据")  @RequestParam(defaultValue = "0") Integer start ,
-                                             @ApiParam(value = "取数据的条数") @RequestParam(defaultValue = "10")  Integer size){
+                                             @ApiParam(value = "取数据的条数") @RequestParam(defaultValue = "10")  Integer size,
+                                                HttpServletRequest request){
 
         PageInfo<MallProductCategory> pageInfo;
         try {
-            pageInfo=  productCategoryService.selectProductCategoryByPage(start , size);
+            String sort = getParameterUtf8(request , "sort");
+            String order =  getParameterUtf8(request , "order");
+            String categoryName = getParameterUtf8(request , "name");
+            MallProductCategoryExample productCategoryExample = new MallProductCategoryExample();
+            String orderByClause = genOrderByClause(sort, order);
+            if (!StringUtils.isEmpty(orderByClause)){
+                productCategoryExample.setOrderByClause(orderByClause);
+            }
+            if(!StringUtils.isEmpty(categoryName)){
+                productCategoryExample.createCriteria().andNameLike("%"+categoryName+"%");
+            }
+            pageInfo=  productCategoryService.selectProductCategoryByPage(start , size , productCategoryExample);
         } catch (Exception e) {
             e.printStackTrace();
             return ResultUtils.createError(e.getMessage());
@@ -80,13 +134,28 @@ public class ProductCategoryController extends BaseController{
         return ResultUtils.createSuccess("更新成功");
     }
 
+    @ApiOperation(value = "根据分类Id集合批量删除商品分类" , httpMethod = "POST")
+    @RequestMapping(value = "v1/categories:delete" , method = RequestMethod.POST)
+    @ResponseBody
+    public ResultUtils deleteProductCategoryByIdList(@RequestBody @ApiParam(value = "分类Id集合" , required = true)   List<Long> categoryIdList){
+
+        try {
+            productCategoryService.deleteProductCategoryIdList(categoryIdList);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultUtils.createError(e.getMessage());
+        }
+
+        return ResultUtils.createSuccess("删除成功");
+    }
+
     @ApiOperation(value = "根据分类Id删除商品分类" , httpMethod = "DELETE")
     @RequestMapping(value = "v1/categories/{categoryId}" , method = RequestMethod.DELETE)
     @ResponseBody
-    public ResultUtils deleteProductCategory(@ApiParam(value = "分类Id" , required = true)@PathVariable  Long categoryId){
+    public ResultUtils deleteProductCategoryById(@ApiParam(value = "分类Id" , required = true)@PathVariable  Long categoryId){
 
         try {
-            productCategoryService.deleteProductCategory(categoryId);
+            productCategoryService.reallyDeleteProductCategory(categoryId);
         } catch (Exception e) {
             e.printStackTrace();
             return ResultUtils.createError(e.getMessage());

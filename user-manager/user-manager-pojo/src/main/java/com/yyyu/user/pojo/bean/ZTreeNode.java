@@ -1,5 +1,7 @@
 package com.yyyu.user.pojo.bean;
 
+import java.io.Serializable;
+
 /**
  * 功能：
  *
@@ -8,8 +10,8 @@ package com.yyyu.user.pojo.bean;
  */
 public class ZTreeNode {
 
-    private Integer id;
-    private Integer pId;
+    private Serializable id;
+    private Serializable pId;
     private String name;
     private String page;
     private boolean checked;
@@ -20,19 +22,19 @@ public class ZTreeNode {
 
     }
 
-    public Integer getId() {
+    public Serializable getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Serializable id) {
         this.id = id;
     }
 
-    public Integer getpId() {
+    public Serializable getpId() {
         return pId;
     }
 
-    public void setpId(Integer pId) {
+    public void setpId(Serializable pId) {
         this.pId = pId;
     }
 

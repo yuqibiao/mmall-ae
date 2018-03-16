@@ -44,16 +44,15 @@ public class ProductServiceImpl implements ProductServiceInter{
     }
 
     @Override
-    public PageInfo<MallProduct> selectProductPageByCategoryId(Long categoryId , Integer start, Integer size) {
+    public PageInfo<MallProduct> selectProductPageByCategoryId(Long categoryId , Integer start, Integer size , MallProductExample mallProductExample) {
         PageHelper.offsetPage(start , size);
-        MallProductExample example = new MallProductExample();
-        example.createCriteria().andCategoryIdEqualTo(categoryId);
-        List<MallProduct> mallProducts = mallProductMapper.selectByExample(example);
+        mallProductExample.createCriteria().andCategoryIdEqualTo(categoryId);
+        List<MallProduct> mallProducts = mallProductMapper.selectByExample(mallProductExample);
         return new PageInfo<>(mallProducts);
     }
 
     @Override
-    public MallProduct selectMallProductByProductId(Long productId) {
+    public MallProductWithBLOBs selectMallProductByProductId(Long productId) {
         return mallProductMapper.selectByPrimaryKey(productId);
     }
 
@@ -70,5 +69,15 @@ public class ProductServiceImpl implements ProductServiceInter{
     @Override
     public void addProduct(MallProductWithBLOBs product) {
         mallProductMapper.insertSelective(product);
+    }
+
+    @Override
+    public void deleteProductByProductIdList(List<Long> productIdList) {
+
+        MallProductExample productExample = new MallProductExample();
+        productExample.createCriteria().andProductIdIn(productIdList);
+
+        mallProductMapper.deleteByExample(productExample);
+
     }
 }

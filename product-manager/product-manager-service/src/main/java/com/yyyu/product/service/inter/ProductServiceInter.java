@@ -2,6 +2,7 @@ package com.yyyu.product.service.inter;
 
 import com.github.pagehelper.PageInfo;
 import com.yyyu.product.pojo.MallProduct;
+import com.yyyu.product.pojo.MallProductExample;
 import com.yyyu.product.pojo.MallProductWithBLOBs;
 
 import java.math.BigDecimal;
@@ -26,7 +27,7 @@ public interface ProductServiceInter {
      * @param size
      * @return
      */
-    PageInfo<MallProduct> selectProductPageByCategoryId(Long categoryId , Integer start , Integer size);
+    PageInfo<MallProduct> selectProductPageByCategoryId(Long categoryId , Integer start , Integer size , MallProductExample mallProductExample);
 
     /**
      * 根据商品id查询商品的信息
@@ -34,7 +35,7 @@ public interface ProductServiceInter {
      * @param productId
      * @return
      */
-    MallProduct selectMallProductByProductId(Long productId);
+    MallProductWithBLOBs selectMallProductByProductId(Long productId);
 
     /**
      * 修改商品信息
@@ -57,4 +58,10 @@ public interface ProductServiceInter {
      */
     void addProduct(MallProductWithBLOBs product);
 
+    /**
+     * 批量删除商品
+     *
+     * @param productIdList
+     */
+    void deleteProductByProductIdList(List<Long> productIdList);
 }
