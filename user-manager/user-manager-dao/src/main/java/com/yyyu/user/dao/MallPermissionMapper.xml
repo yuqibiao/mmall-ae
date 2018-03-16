@@ -5,6 +5,7 @@
     <id column="permission_id" property="permissionId" jdbcType="INTEGER" />
     <result column="parent_id" property="parentId" jdbcType="INTEGER" />
     <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="alias" property="alias" jdbcType="VARCHAR" />
     <result column="description" property="description" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="SMALLINT" />
     <result column="code" property="code" jdbcType="SMALLINT" />
@@ -90,7 +91,7 @@
     </if>
   </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select 
+    select
     <include refid="Base_Column_List" />
     from mall_permission
     where permission_id = #{permissionId,jdbcType=INTEGER}
@@ -113,13 +114,13 @@
       </foreach>
     </delete>
     <insert id="insert" parameterType="com.yyyu.user.pojo.MallPermission" >
-    insert into mall_permission (permission_id, parent_id, name, 
-      description, status, code, 
-      target, type, create_time, 
+    insert into mall_permission (permission_id, parent_id, name,
+      description, status, code,
+      target, type, create_time,
       update_time)
-    values (#{permissionId,jdbcType=INTEGER}, #{parentId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
-      #{description,jdbcType=VARCHAR}, #{status,jdbcType=SMALLINT}, #{code,jdbcType=SMALLINT}, 
-      #{target,jdbcType=VARCHAR}, #{type,jdbcType=SMALLINT}, #{createTime,jdbcType=TIMESTAMP}, 
+    values (#{permissionId,jdbcType=INTEGER}, #{parentId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR},
+      #{description,jdbcType=VARCHAR}, #{status,jdbcType=SMALLINT}, #{code,jdbcType=SMALLINT},
+      #{target,jdbcType=VARCHAR}, #{type,jdbcType=SMALLINT}, #{createTime,jdbcType=TIMESTAMP},
       #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.yyyu.user.pojo.MallPermission" >

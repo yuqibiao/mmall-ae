@@ -21,9 +21,11 @@ public class MallPermission {
 
     private String icon;
 
+    private Date updateTime;
+
     private Date createTime;
 
-    private Date updateTime;
+    private String alias;
 
     public Integer getPermissionId() {
         return permissionId;
@@ -97,6 +99,14 @@ public class MallPermission {
         this.icon = icon;
     }
 
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
     public Date getCreateTime() {
         return createTime;
     }
@@ -105,11 +115,11 @@ public class MallPermission {
         this.createTime = createTime;
     }
 
-    public Date getUpdateTime() {
-        return updateTime;
+    public String getAlias() {
+        return alias;
     }
 
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
+    public void setAlias(String alias) {
+        this.alias = alias;
     }
 }

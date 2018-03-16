@@ -17,6 +17,8 @@ public class MallRole {
 
     private Date updateTime;
 
+    private String alias;
+
     public Integer getRoleId() {
         return roleId;
     }
@@ -71,5 +73,13 @@ public class MallRole {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public String getAlias() {
+        return alias;
+    }
+
+    public void setAlias(String alias) {
+        this.alias = alias;
     }
 }

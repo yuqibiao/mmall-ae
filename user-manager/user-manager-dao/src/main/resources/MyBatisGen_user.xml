@@ -42,11 +42,11 @@
         </javaClientGenerator>
 
         <!-- !!!! 要自动生成的表 !!!! -->
-        <table tableName="mall_role" />
-        <table tableName="mall_permission" />
-        <table tableName="mall_user_role" />
-        <table tableName="mall_role_permission"/>
-        <table tableName="mall_user"/>
+       <!-- <table tableName="mall_role" />
+        <table tableName="mall_permission" />-->
+        <!--<table tableName="mall_user_role" />
+        <table tableName="mall_role_permission"/>-->
+        <table tableName="mall_user_token"/>
 
     </context>
 </generatorConfiguration>
