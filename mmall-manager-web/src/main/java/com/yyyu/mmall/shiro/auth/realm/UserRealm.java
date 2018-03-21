@@ -15,9 +15,7 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * 功能：
@@ -40,10 +38,15 @@ public class UserRealm extends AuthorizingRealm{
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {//授权
 
-        logger.info("================UserRealm========AuthorizationInfo=========");
-        String usernameAndId = (String)principals.getPrimaryPrincipal();
+        Collection<String> userIdCon = principals.fromRealm("userRealm");//根据realmName获取信息
+        ArrayList<String> userIdList = new ArrayList<>(userIdCon);
+        if (userIdList==null||userIdList.size()==0){//没有对应的realm（判断授权时会调用所有realm的doGetAuthorizationInfo）
+            return null;
+        }
+        //System.out.println("=============userRealm=========授权11========doGetAuthorizationInfo===========");
+        String userIdStr = userIdList.get(0);
        // String username = usernameAndId.split("#")[0];
-        Long userId =Long.parseLong( usernameAndId.split("#")[1]);
+        Long userId =Long.parseLong( userIdStr);
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
         List<MallRole> mallRoles = userRoleService.selectRoleByUserId(userId);
         Set<String> roleCodeSet = new HashSet<>();
@@ -68,6 +71,9 @@ public class UserRealm extends AuthorizingRealm{
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken)
             throws AuthenticationException {//认证
+
+        //System.out.println("=============userRealm=========认证========doGetAuthenticationInfo===========");
+
         // 1. 把AuthenticationToken转换为UsernamePasswordToken
         UsernamePasswordToken usernamePasswordToken = (UsernamePasswordToken) authenticationToken;
         //2.取出用户名
@@ -78,9 +84,9 @@ public class UserRealm extends AuthorizingRealm{
         }
         String password = mallUsers.get(0).getPassword();
         Long userId = mallUsers.get(0).getUserId();
-        String realmName = getName();
+        String realmName = "userRealm";
         ByteSource salt = ByteSource.Util.bytes(username);
-        SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(username+"#"+userId , password , salt , realmName);
+        SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(userId , password , salt , realmName);
         return info;
     }
 }

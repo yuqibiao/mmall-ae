@@ -64,9 +64,14 @@ public class ResultUtils<T> implements Serializable {
         return new ResultUtils<T>(ResultCode.ERROR.getCode() ,msg);
     }
 
-    public static <T>ResultUtils<T> createResilt(Integer code , String msg , T data){
+    public static <T>ResultUtils<T> createResult(Integer code , String msg , T data){
 
         return new ResultUtils<T>(code , msg , data);
+    }
+
+    public static <T>ResultUtils<T> createResult(Integer code , String msg ){
+
+        return new ResultUtils<T>(code , msg , null);
     }
 
 

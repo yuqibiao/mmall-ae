@@ -163,6 +163,7 @@ public class RoleController extends BaseController {
     private MallRole setMallRole(RoleVo roleVo){
         MallRole role = new MallRole();
         role.setName(roleVo.getName());
+        role.setAlias(roleVo.getAlias());
         role.setCode(roleVo.getCode());
         role.setDescription(roleVo.getDescription());
         role.setStatus(roleVo.getStatus());

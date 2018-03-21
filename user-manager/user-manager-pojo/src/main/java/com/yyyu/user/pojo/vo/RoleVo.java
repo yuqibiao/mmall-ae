@@ -13,6 +13,9 @@ public class RoleVo {
     @ApiModelProperty(value = "角色名")
     private String name;
 
+    @ApiModelProperty(value = "角色别名")
+    private String alias;
+
     @ApiModelProperty(value = "编码" )
     private Short code;
 
@@ -38,6 +41,14 @@ public class RoleVo {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getAlias() {
+        return alias;
+    }
+
+    public void setAlias(String alias) {
+        this.alias = alias;
     }
 
     public Short getCode() {

@@ -70,7 +70,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    role_id, name, code, description, status, create_time, update_time
+    role_id, name, alias , code, description, status, create_time, update_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.yyyu.user.pojo.MallRoleExample" >
     select
@@ -181,6 +181,9 @@
       <if test="record.name != null" >
         name = #{record.name,jdbcType=VARCHAR},
       </if>
+      <if test="record.alias != null" >
+        alias = #{record.alias,jdbcType=VARCHAR},
+      </if>
       <if test="record.code != null" >
         code = #{record.code,jdbcType=SMALLINT},
       </if>
@@ -205,6 +208,7 @@
     update mall_role
     set role_id = #{record.roleId,jdbcType=INTEGER},
       name = #{record.name,jdbcType=VARCHAR},
+      alias = #{alias,jdbcType=VARCHAR},
       code = #{record.code,jdbcType=SMALLINT},
       description = #{record.description,jdbcType=VARCHAR},
       status = #{record.status,jdbcType=SMALLINT},
@@ -219,6 +223,9 @@
     <set >
       <if test="name != null" >
         name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="alias != null" >
+        alias = #{alias,jdbcType=VARCHAR},
       </if>
       <if test="code != null" >
         code = #{code,jdbcType=SMALLINT},
@@ -241,6 +248,7 @@
   <update id="updateByPrimaryKey" parameterType="com.yyyu.user.pojo.MallRole" >
     update mall_role
     set name = #{name,jdbcType=VARCHAR},
+      alias = #{alias,jdbcType=VARCHAR},
       code = #{code,jdbcType=SMALLINT},
       description = #{description,jdbcType=VARCHAR},
       status = #{status,jdbcType=SMALLINT},

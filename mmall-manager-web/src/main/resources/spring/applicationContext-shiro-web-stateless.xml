@@ -82,12 +82,13 @@
         <property name="filterChainDefinitions">
             <value>
                 /api/user/login.action=anon
+                /api/user/v1/session/test=anon
                 /assert/**=anon
                 /login.jsp=anon
                 /user/checkUser.action=anon
                 /swagger*/**=anon
-                /api-docs/**=anon
-                /api/**=statelessAuthc
+                /**/api-docs=anon
+                /api/**=anon<!--statelessAuthc-->
                 /** =authc <!--authc-->
             </value>
         </property>

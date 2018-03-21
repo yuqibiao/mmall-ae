@@ -9,6 +9,8 @@ public class MallPermission {
 
     private String name;
 
+    private String alias;
+
     private String description;
 
     private Short status;
@@ -24,8 +26,6 @@ public class MallPermission {
     private Date updateTime;
 
     private Date createTime;
-
-    private String alias;
 
     public Integer getPermissionId() {
         return permissionId;

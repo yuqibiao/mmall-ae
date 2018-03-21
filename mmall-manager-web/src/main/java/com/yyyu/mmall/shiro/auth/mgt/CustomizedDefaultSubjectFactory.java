@@ -26,13 +26,13 @@ public class CustomizedDefaultSubjectFactory extends DefaultWebSubjectFactory {
 
     public CustomizedDefaultSubjectFactory(DefaultSessionStorageEvaluator  storageEvaluator) {
         this.storageEvaluator = storageEvaluator;
-        //logger.info("=========-=================CustomizedDefaultSubjectFactory========");
+        logger.info("=========-=================CustomizedDefaultSubjectFactory========");
     }
 
     @Override
     public Subject createSubject(SubjectContext context) {
         this.storageEvaluator.setSessionStorageEnabled(true);
-        //logger.info("=========createSubject===token="+token);
+        logger.info("=========createSubject===token=");
         WebSubjectContext wsc = (WebSubjectContext)context;
         ServletRequest servletRequest = wsc.resolveServletRequest();
         HttpServletRequest request = WebUtils.toHttp(servletRequest);
@@ -40,9 +40,9 @@ public class CustomizedDefaultSubjectFactory extends DefaultWebSubjectFactory {
         while (headerNames.hasMoreElements()){
             this.storageEvaluator.setSessionStorageEnabled(false);
             String headerName = headerNames.nextElement().toString();
-            if (headerName.equalsIgnoreCase("token")){//header中有token参数，说明是stateless请求
+            if (headerName.equalsIgnoreCase("sessionId")){//header中有token参数，说明是stateless请求
                 context.setSessionCreationEnabled(false);
-                //logger.info("=========STATELESS====不创建session");
+                logger.info("=========STATELESS====不创建session");
                 break;
             }
         }

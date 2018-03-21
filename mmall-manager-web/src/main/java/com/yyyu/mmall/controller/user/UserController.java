@@ -2,25 +2,32 @@ package com.yyyu.mmall.controller.user;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.github.pagehelper.PageInfo;
+import com.google.gson.Gson;
 import com.yyyu.mmall.controller.BaseController;
+import com.yyyu.mmall.global.Constant;
+import com.yyyu.mmall.uitls.codec.DESCoder;
 import com.yyyu.mmall.uitls.controller.ResultUtils;
 import com.yyyu.mmall.uitls.lang.StringUtils;
 import com.yyyu.user.pojo.MallUser;
 import com.yyyu.user.pojo.MallUserExample;
-import com.yyyu.user.pojo.vo.UserAddVo;
+import com.yyyu.user.pojo.bean.TokenJwt;
 import com.yyyu.user.pojo.vo.UserUpdateVo;
 import com.yyyu.user.pojo.vo.UserVo;
-import com.yyyu.user.service.inter.UserRoleServiceInter;
 import com.yyyu.user.service.inter.UserServiceInter;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -36,8 +43,6 @@ public class UserController extends BaseController{
 
     @Autowired
     private UserServiceInter userService;
-    @Autowired
-    private UserRoleServiceInter userRoleService;
 
     @ApiOperation(value = "添加用户",
             notes = "传入json格式的用户信息的",
@@ -150,10 +155,15 @@ public class UserController extends BaseController{
     @RequestMapping(value = "v1/users/{userId}",method = RequestMethod.GET)
     @JsonView(MallUser.UserReturn.class)
     @ResponseBody
-    public ResultUtils  getUserById(@ApiParam(value = "用户id",  required = true) @PathVariable("userId")  Long userId){
+    public ResultUtils  getUserById(HttpServletResponse response , @ApiParam(value = "用户id",  required = true) @PathVariable("userId")  Long userId){
 
         MallUser mallUser;
         try {
+          /*  Subject currentUser = SecurityUtils.getSubject();
+            boolean hasRole = currentUser.hasRole("role:admin");
+            if (!hasRole){
+               return ResultUtils.createError("没有admin权限");
+            }*/
             mallUser = userService.selectByUserId(userId);
         } catch (Exception e) {
             e.printStackTrace();
@@ -196,6 +206,22 @@ public class UserController extends BaseController{
         }
 
         return ResultUtils.createSuccess(mallUserPageInfo);
+    }
+
+    @RequestMapping(value = "v1/session/test", method = RequestMethod.GET)
+    @JsonView(MallUser.UserDetail.class)
+    @ResponseBody
+    public ResultUtils getTokenJwt(){
+        Calendar calendar = Calendar.getInstance();
+        Date currentDate = new Date(System.currentTimeMillis());
+        calendar.setTime(currentDate);
+        calendar.add(Calendar.DATE , 7);
+        TokenJwt tokenJwt = new TokenJwt(2 + "", currentDate.getTime(), calendar.getTime().getTime());
+        String tokenJwtStr = new Gson().toJson(tokenJwt);
+        //System.out.println("tokenJwtStr："+tokenJwtStr);
+        String encryptJwt = DESCoder.encrypt(tokenJwtStr, Constant.DES_KEY);
+        //System.out.println("encryptJwt："+encryptJwt);
+        return ResultUtils.createSuccess("获取数据成功" , encryptJwt);
     }
 
 }

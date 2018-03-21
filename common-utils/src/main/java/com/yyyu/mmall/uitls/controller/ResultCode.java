@@ -12,6 +12,8 @@ public enum  ResultCode {
     SUCCESS(200,"SUCCESS"),
     //错误
     ERROR(500,"ERROR"),
+   TOKEN_EXCEPTION(201 , "TOKEN_EXCEPTION"),//exception
+   TOKEN_OUT_OF_DATE(202 , "TOKEN_EXCEPTION"),//token过期
     //未登录
     NEED_LOGIN(10,"NEED_LOGIN"),
     //参数异常

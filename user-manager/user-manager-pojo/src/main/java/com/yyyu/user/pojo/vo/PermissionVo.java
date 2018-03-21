@@ -16,6 +16,9 @@ public class PermissionVo {
     @ApiModelProperty(value = "权限名")
     private String name;
 
+    @ApiModelProperty(value = "权限别名")
+    private String alias;
+
     @ApiModelProperty(value = "权限描述")
     private String description;
 
@@ -48,6 +51,14 @@ public class PermissionVo {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getAlias() {
+        return alias;
+    }
+
+    public void setAlias(String alias) {
+        this.alias = alias;
     }
 
     public String getDescription() {

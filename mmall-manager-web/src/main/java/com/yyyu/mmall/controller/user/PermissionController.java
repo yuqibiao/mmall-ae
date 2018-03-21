@@ -147,6 +147,7 @@ public class PermissionController extends BaseController{
         MallPermission permission = new MallPermission();
         permission.setParentId(permissionVo.getParentId());
         permission.setName(permissionVo.getName());
+        permission.setAlias(permissionVo.getAlias());
         permission.setDescription(permissionVo.getDescription());
         permission.setStatus(permissionVo.getStatus());
         permission.setCode(permissionVo.getCode());

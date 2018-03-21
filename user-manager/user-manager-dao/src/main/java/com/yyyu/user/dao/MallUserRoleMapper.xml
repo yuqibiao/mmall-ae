@@ -139,7 +139,7 @@
     </resultMap>
 
     <select id="selectRoleByUserId" resultMap="RoleResult" parameterType="Long">
-      SELECT mall_role.role_id ,mall_role.name , mall_role.code , mall_role.description,mall_role.status , mall_role.create_time ,mall_role.update_time
+      SELECT mall_role.role_id ,mall_role.name , mall_role.alias , mall_role.code , mall_role.description,mall_role.status , mall_role.create_time ,mall_role.update_time
       FROM mall_role ,mall_user_role ,  mall_user
       WHERE mall_user.user_id = mall_user_role.user_id
           AND mall_role.role_id =mall_user_role.role_id

@@ -7,6 +7,8 @@ public class MallRole {
 
     private String name;
 
+    private String alias;
+
     private Short code;
 
     private String description;
@@ -17,7 +19,6 @@ public class MallRole {
 
     private Date updateTime;
 
-    private String alias;
 
     public Integer getRoleId() {
         return roleId;
