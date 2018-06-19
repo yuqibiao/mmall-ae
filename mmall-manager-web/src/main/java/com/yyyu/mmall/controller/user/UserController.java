@@ -8,22 +8,24 @@ import com.yyyu.mmall.global.Constant;
 import com.yyyu.mmall.uitls.codec.DESCoder;
 import com.yyyu.mmall.uitls.controller.ResultUtils;
 import com.yyyu.mmall.uitls.lang.StringUtils;
+import com.yyyu.mmall.utils.TokenManager;
 import com.yyyu.user.pojo.MallUser;
 import com.yyyu.user.pojo.MallUserExample;
 import com.yyyu.user.pojo.bean.TokenJwt;
+import com.yyyu.user.pojo.result.LoginReturn;
 import com.yyyu.user.pojo.vo.UserUpdateVo;
 import com.yyyu.user.pojo.vo.UserVo;
 import com.yyyu.user.service.inter.UserServiceInter;
+import com.yyyu.user.service.inter.UserTokenServiceInter;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Calendar;
@@ -43,6 +45,52 @@ public class UserController extends BaseController{
 
     @Autowired
     private UserServiceInter userService;
+
+    @Autowired
+    private UserTokenServiceInter userTokenService;
+
+    @ApiOperation(value = "用户登录",
+            httpMethod = "POST")
+    @RequestMapping(value = "v1/user/login" , method = RequestMethod.POST)
+    @ResponseBody
+    public ResultUtils login(@ApiParam(value = "用户名", required = true ) @RequestParam("username") String username ,
+                             @ApiParam(value = "密码", required = true )@RequestParam("pwd") String pwd ,
+                              HttpServletResponse response){
+
+        LoginReturn loginReturn = new LoginReturn();
+
+        try {
+            List<MallUser> mallUsers = userService.selectByUsername(username);
+            if (mallUsers==null|| mallUsers.size()<=0){
+                return ResultUtils.createError(",用户名或密码错误");
+            }
+            MallUser mallUser = mallUsers.get(0);
+            String password = mallUser.getPassword();
+            if (!pwd.equals(password)){
+                return ResultUtils.createError("用户名或密码错误");
+            }
+            loginReturn.setUserId(mallUser.getUserId());
+            loginReturn.setUsername(mallUser.getUsername());
+            loginReturn.setEmail(mallUser.getEmail());
+            loginReturn.setPhone(mallUser.getPhone());
+            loginReturn.setStatus(mallUser.getStatus());
+            loginReturn.setCreateTime(mallUser.getCreateTime());
+            loginReturn.setUpdateTime(mallUser.getUpdateTime());
+            //生成token
+            String token = TokenManager.getInstance().genToken();
+            //TODO 保存到数据库
+            loginReturn.setToken(token);
+            //加入到cookie缓存
+            Cookie cookie = new Cookie(Constant.TOKEN, token);
+            cookie.setPath("/");
+            cookie.setMaxAge(Integer.MAX_VALUE);
+            response.addCookie(cookie);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultUtils.createError(e.getMessage());
+        }
+        return ResultUtils.createSuccess(loginReturn);
+    }
 
     @ApiOperation(value = "添加用户",
             notes = "传入json格式的用户信息的",
@@ -155,10 +203,17 @@ public class UserController extends BaseController{
     @RequestMapping(value = "v1/users/{userId}",method = RequestMethod.GET)
     @JsonView(MallUser.UserReturn.class)
     @ResponseBody
-    public ResultUtils  getUserById(HttpServletResponse response , @ApiParam(value = "用户id",  required = true) @PathVariable("userId")  Long userId){
+    public ResultUtils  getUserById(HttpServletRequest request , @ApiParam(value = "用户id",  required = true) @PathVariable("userId")  Long userId){
 
         MallUser mallUser;
         try {
+
+            //TODO 判断token
+            String token = TokenManager.getInstance().getToken(request, Constant.TOKEN);
+            if (StringUtils.isEmpty(token)){
+                return ResultUtils.createError("token没传");
+            }
+
           /*  Subject currentUser = SecurityUtils.getSubject();
             boolean hasRole = currentUser.hasRole("role:admin");
             if (!hasRole){
@@ -223,5 +278,6 @@ public class UserController extends BaseController{
         //System.out.println("encryptJwt："+encryptJwt);
         return ResultUtils.createSuccess("获取数据成功" , encryptJwt);
     }
+
 
 }

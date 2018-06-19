@@ -86,7 +86,7 @@
                 /assert/**=anon
                 /login.jsp=anon
                 /user/checkUser.action=anon
-                /swagger*/**=anon
+                /swagger-*/**=anon
                 /**/api-docs=anon
                 /api/**=anon<!--statelessAuthc-->
                 /** =authc <!--authc-->

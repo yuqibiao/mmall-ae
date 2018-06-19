@@ -10,4 +10,6 @@ public class Constant {
 
     public  static final String DES_KEY = "ifcO1aQ7ofs=";
 
+    public  static final String TOKEN = "token";
+
 }

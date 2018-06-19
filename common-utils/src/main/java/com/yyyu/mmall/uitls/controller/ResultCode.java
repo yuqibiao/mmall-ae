@@ -12,12 +12,18 @@ public enum  ResultCode {
     SUCCESS(200,"SUCCESS"),
     //错误
     ERROR(500,"ERROR"),
-   TOKEN_EXCEPTION(201 , "TOKEN_EXCEPTION"),//exception
-   TOKEN_OUT_OF_DATE(202 , "TOKEN_EXCEPTION"),//token过期
-    //未登录
-    NEED_LOGIN(10,"NEED_LOGIN"),
     //参数异常
-    ILLEGAL_ARGUMENT(2,"ILLEGAL_ARGUMENT");
+    ILLEGAL_ARGUMENT(503,"ILLEGAL_ARGUMENT"),
+
+    //---token相关
+   TOKEN_EXCEPTION(1001 , "token异常"),//exception
+    TOKEN_IS_NULL(1002 , "token为空"),
+    TOKEN_IS_ILLEGAL(1003 , "token不合法"),
+   TOKEN_OUT_OF_DATE(1004 , "token过期了"),//token过期
+
+    //---认证相关
+    //未登录
+    NEED_LOGIN(2001,"NEED_LOGIN");
 
     final private int code;
     final private String desc;
