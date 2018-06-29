@@ -49,8 +49,43 @@
     <aop:config proxy-target-class="true"/>
 
     <!--注解的方式配置-->
-    <!--<bean class="com.yyyu.mmall.aop.AuthorizationAdvice"/>-->
+    <bean class="com.yyyu.mmall.aop.AuthorizationAdvice"/>
     <!-- 开启使用注解完成织入 -->
     <aop:aspectj-autoproxy expose-proxy="true"></aop:aspectj-autoproxy>
+
+
+    <!--Srping拦截器配置-->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <mvc:exclude-mapping path="/**/fonts/*"/>
+            <mvc:exclude-mapping path="/**/*.css"/>
+            <mvc:exclude-mapping path="/**/*.js"/>
+            <mvc:exclude-mapping path="/**/*.png"/>
+            <mvc:exclude-mapping path="/**/*.gif"/>
+            <mvc:exclude-mapping path="/**/*.jpg"/>
+            <mvc:exclude-mapping path="/**/*.jpeg"/>
+            <mvc:exclude-mapping path="/**/*login*"/>
+            <mvc:exclude-mapping path="/**/*Login*"/>
+            <mvc:exclude-mapping path="/**/*test*"/>
+            <mvc:exclude-mapping path="/**/swagger-*/**"/>
+            <mvc:exclude-mapping path="/**/*api*"/>
+            <bean class="com.yyyu.mmall.filter.TokenAuthInterceptor"/>
+        </mvc:interceptor>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <bean class="com.yyyu.mmall.filter.PerformanceInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
+    <!--拦截器得这种配置方法在annotation-driven配置后失效-->
+    <!--   <bean id="tokenAuthInterceptor" class="com.yyyu.mmall.filter.TokenAuthInterceptor"/>
+       <bean class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping">
+           <property name="interceptors">
+               <list>
+                   <ref bean="tokenAuthInterceptor"/>
+               </list>
+           </property>
+       </bean>-->
 
 </beans>

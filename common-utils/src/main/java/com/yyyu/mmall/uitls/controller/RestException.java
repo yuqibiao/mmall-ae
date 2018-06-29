@@ -7,7 +7,7 @@ package com.yyyu.mmall.uitls.controller;
  * @version 1.0
  * @date 2018/6/19
  */
-public class RestException extends RuntimeException{
+public class RestException extends Exception{
 
     private Integer code;
     private String msg;

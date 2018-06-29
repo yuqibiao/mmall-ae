@@ -89,7 +89,7 @@
                 /swagger-*/**=anon
                 /**/api-docs=anon
                 /api/**=anon<!--statelessAuthc-->
-                /** =authc <!--authc-->
+                /** =anon <!--authc-->
             </value>
         </property>
     </bean>

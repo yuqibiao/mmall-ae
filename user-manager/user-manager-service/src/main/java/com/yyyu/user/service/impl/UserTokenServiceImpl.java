@@ -71,7 +71,7 @@ public class UserTokenServiceImpl implements UserTokenServiceInter{
 
     @Override
     public void addUserToken(MallUserToken userToken) {
-
+        deleteTokenByUserId(userToken.getUserId());
         userTokenMapper.insert(userToken);
 
     }

@@ -6,11 +6,13 @@ import com.google.gson.Gson;
 import com.yyyu.mmall.controller.BaseController;
 import com.yyyu.mmall.global.Constant;
 import com.yyyu.mmall.uitls.codec.DESCoder;
+import com.yyyu.mmall.uitls.controller.RestException;
 import com.yyyu.mmall.uitls.controller.ResultUtils;
 import com.yyyu.mmall.uitls.lang.StringUtils;
 import com.yyyu.mmall.utils.TokenManager;
 import com.yyyu.user.pojo.MallUser;
 import com.yyyu.user.pojo.MallUserExample;
+import com.yyyu.user.pojo.MallUserToken;
 import com.yyyu.user.pojo.bean.TokenJwt;
 import com.yyyu.user.pojo.result.LoginReturn;
 import com.yyyu.user.pojo.vo.UserUpdateVo;
@@ -77,8 +79,12 @@ public class UserController extends BaseController{
             loginReturn.setCreateTime(mallUser.getCreateTime());
             loginReturn.setUpdateTime(mallUser.getUpdateTime());
             //生成token
-            String token = TokenManager.getInstance().genToken();
-            //TODO 保存到数据库
+            String token = TokenManager.getInstance().genToken(mallUser.getUserId());
+            // 保存到数据库
+          /*  MallUserToken userToken = new MallUserToken();
+            userToken.setUserId(mallUser.getUserId());
+            userToken.setSessionId(token);
+            userTokenService.addUserToken(userToken);*/
             loginReturn.setToken(token);
             //加入到cookie缓存
             Cookie cookie = new Cookie(Constant.TOKEN, token);
@@ -87,6 +93,9 @@ public class UserController extends BaseController{
             response.addCookie(cookie);
         } catch (Exception e) {
             e.printStackTrace();
+            if (e instanceof RestException){
+                return ResultUtils.createResult(((RestException) e).getCode() , ((RestException) e).getMsg());
+            }
             return ResultUtils.createError(e.getMessage());
         }
         return ResultUtils.createSuccess(loginReturn);
@@ -203,22 +212,9 @@ public class UserController extends BaseController{
     @RequestMapping(value = "v1/users/{userId}",method = RequestMethod.GET)
     @JsonView(MallUser.UserReturn.class)
     @ResponseBody
-    public ResultUtils  getUserById(HttpServletRequest request , @ApiParam(value = "用户id",  required = true) @PathVariable("userId")  Long userId){
-
+    public ResultUtils  getUserById(@ApiParam(value = "用户id",  required = true) @PathVariable("userId")  Long userId){
         MallUser mallUser;
         try {
-
-            //TODO 判断token
-            String token = TokenManager.getInstance().getToken(request, Constant.TOKEN);
-            if (StringUtils.isEmpty(token)){
-                return ResultUtils.createError("token没传");
-            }
-
-          /*  Subject currentUser = SecurityUtils.getSubject();
-            boolean hasRole = currentUser.hasRole("role:admin");
-            if (!hasRole){
-               return ResultUtils.createError("没有admin权限");
-            }*/
             mallUser = userService.selectByUserId(userId);
         } catch (Exception e) {
             e.printStackTrace();
