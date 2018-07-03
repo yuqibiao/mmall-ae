@@ -6,13 +6,11 @@ import com.google.gson.Gson;
 import com.yyyu.mmall.controller.BaseController;
 import com.yyyu.mmall.global.Constant;
 import com.yyyu.mmall.uitls.codec.DESCoder;
-import com.yyyu.mmall.uitls.controller.RestException;
 import com.yyyu.mmall.uitls.controller.ResultUtils;
 import com.yyyu.mmall.uitls.lang.StringUtils;
 import com.yyyu.mmall.utils.TokenManager;
 import com.yyyu.user.pojo.MallUser;
 import com.yyyu.user.pojo.MallUserExample;
-import com.yyyu.user.pojo.MallUserToken;
 import com.yyyu.user.pojo.bean.TokenJwt;
 import com.yyyu.user.pojo.result.LoginReturn;
 import com.yyyu.user.pojo.vo.UserUpdateVo;
@@ -61,7 +59,6 @@ public class UserController extends BaseController{
 
         LoginReturn loginReturn = new LoginReturn();
 
-        try {
             List<MallUser> mallUsers = userService.selectByUsername(username);
             if (mallUsers==null|| mallUsers.size()<=0){
                 return ResultUtils.createError(",用户名或密码错误");
@@ -91,13 +88,7 @@ public class UserController extends BaseController{
             cookie.setPath("/");
             cookie.setMaxAge(Integer.MAX_VALUE);
             response.addCookie(cookie);
-        } catch (Exception e) {
-            e.printStackTrace();
-            if (e instanceof RestException){
-                return ResultUtils.createResult(((RestException) e).getCode() , ((RestException) e).getMsg());
-            }
-            return ResultUtils.createError(e.getMessage());
-        }
+
         return ResultUtils.createSuccess(loginReturn);
     }
 
@@ -160,12 +151,7 @@ public class UserController extends BaseController{
     @ResponseBody
     public ResultUtils deleteUser(@ApiParam(value = "用户id"  , required = true) @PathVariable  Long userId){
 
-        try {
-            userService.reallyDeleteUserById(userId);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResultUtils.createError(e.getMessage());
-        }
+        userService.reallyDeleteUserById(userId);
 
         return ResultUtils.createSuccess("删除成功");
     }
@@ -179,27 +165,22 @@ public class UserController extends BaseController{
     @ResponseBody
     public ResultUtils updateUser(@RequestBody UserUpdateVo userUpdateVo){
 
-        try {
-            //查看用户名是否已经存在
-            List<MallUser> mallUsers = userService.selectByUsername(userUpdateVo.getUsername());
-            if (mallUsers.size()>0){
-                return ResultUtils.createError("该用户名已存在");
-            }
-            MallUser user = new MallUser();
-            user.setUserId(userUpdateVo.getUserId());
-            user.setUsername(userUpdateVo.getUsername());
-            //---TODO 加密
-            user.setPassword(userUpdateVo.getPassword());
-            user.setStatus(userUpdateVo.getStatus());
-            user.setPhone(userUpdateVo.getPhone());
-            user.setEmail(userUpdateVo.getEmail());
-            user.setQuestion(userUpdateVo.getQuestion());
-            user.setAnswer(userUpdateVo.getAnswer());
-            userService.updateUser(user);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResultUtils.createError(e.getMessage());
+        //查看用户名是否已经存在
+        List<MallUser> mallUsers = userService.selectByUsername(userUpdateVo.getUsername());
+        if (mallUsers.size()>0){
+            return ResultUtils.createError("该用户名已存在");
         }
+        MallUser user = new MallUser();
+        user.setUserId(userUpdateVo.getUserId());
+        user.setUsername(userUpdateVo.getUsername());
+        //---TODO 加密
+        user.setPassword(userUpdateVo.getPassword());
+        user.setStatus(userUpdateVo.getStatus());
+        user.setPhone(userUpdateVo.getPhone());
+        user.setEmail(userUpdateVo.getEmail());
+        user.setQuestion(userUpdateVo.getQuestion());
+        user.setAnswer(userUpdateVo.getAnswer());
+        userService.updateUser(user);
         MallUser mallUser = userService.selectByUserId(userUpdateVo.getUserId());
         return ResultUtils.createSuccess("修改用户信息成功",mallUser);
     }
@@ -214,13 +195,7 @@ public class UserController extends BaseController{
     @ResponseBody
     public ResultUtils  getUserById(@ApiParam(value = "用户id",  required = true) @PathVariable("userId")  Long userId){
         MallUser mallUser;
-        try {
-            mallUser = userService.selectByUserId(userId);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResultUtils.createError(e.getMessage());
-        }
-
+        mallUser = userService.selectByUserId(userId);
         return ResultUtils.createSuccess(mallUser);
     }
 
@@ -238,24 +213,18 @@ public class UserController extends BaseController{
                                      HttpServletRequest request){
 
         PageInfo<MallUser> mallUserPageInfo;
-        try {
-            String sort = getParameterUtf8(request , "sort");
-            String order =  getParameterUtf8(request , "order");
-            String username =  getParameterUtf8(request , "username");
-            MallUserExample mallUserExample = new MallUserExample();
-            String orderByClause = genOrderByClause(sort, order);
-            if (!StringUtils.isEmpty(orderByClause)){
-                mallUserExample.setOrderByClause(orderByClause);
-            }
-            if(!StringUtils.isEmpty(username)){
-                mallUserExample.createCriteria().andUsernameLike("%"+username+"%");
-            }
-            mallUserPageInfo = userService.selectUserByPage(start,size , mallUserExample);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResultUtils.createError(e.getMessage());
+        String sort = getParameterUtf8(request , "sort");
+        String order =  getParameterUtf8(request , "order");
+        String username =  getParameterUtf8(request , "username");
+        MallUserExample mallUserExample = new MallUserExample();
+        String orderByClause = genOrderByClause(sort, order);
+        if (!StringUtils.isEmpty(orderByClause)){
+            mallUserExample.setOrderByClause(orderByClause);
         }
-
+        if(!StringUtils.isEmpty(username)){
+            mallUserExample.createCriteria().andUsernameLike("%"+username+"%");
+        }
+        mallUserPageInfo = userService.selectUserByPage(start,size , mallUserExample);
         return ResultUtils.createSuccess(mallUserPageInfo);
     }
 
@@ -269,9 +238,8 @@ public class UserController extends BaseController{
         calendar.add(Calendar.DATE , 7);
         TokenJwt tokenJwt = new TokenJwt(2 + "", currentDate.getTime(), calendar.getTime().getTime());
         String tokenJwtStr = new Gson().toJson(tokenJwt);
-        //System.out.println("tokenJwtStr："+tokenJwtStr);
         String encryptJwt = DESCoder.encrypt(tokenJwtStr, Constant.DES_KEY);
-        //System.out.println("encryptJwt："+encryptJwt);
+        int i=100/0;
         return ResultUtils.createSuccess("获取数据成功" , encryptJwt);
     }
 
