@@ -261,17 +261,17 @@
         </configuration>
       </plugin>
       <!-- tomcat7插件 (tomcat7:run)-->
-      <plugin>
+     <!-- <plugin>
         <groupId>org.apache.tomcat.maven</groupId>
         <artifactId>tomcat7-maven-plugin</artifactId>
         <version>2.1</version>
         <configuration>
-          <!-- 可以灵活配置工程路径 -->
+          &lt;!&ndash; 可以灵活配置工程路径 &ndash;&gt;
           <path>/mmall</path>
-          <!-- 可以灵活配置端口号 -->
-          <port>8080</port>
+          &lt;!&ndash; 可以灵活配置端口号 &ndash;&gt;
+          <port>80</port>
         </configuration>
-        <!-- 在打包的时候运行这个容器 -->
+        &lt;!&ndash; 在打包的时候运行这个容器 &ndash;&gt;
         <executions>
           <execution>
             <phase>package</phase>
@@ -280,7 +280,7 @@
             </goals>
           </execution>
         </executions>
-      </plugin>
+      </plugin>-->
     </plugins>
 
     <!--build时打包resources文件-->
