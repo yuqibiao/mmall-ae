@@ -30,4 +30,99 @@
         </dependency>
     </dependencies>
 
+    <!--实现测试环境、开发环境、生产环境的动态配置-->
+    <profiles>
+        <profile>
+            <id>test</id>
+            <properties>
+                <env>test</env>
+            </properties>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <filters>
+                    <filter>${basedir}/src/main/resources/db/env/test/db.properties</filter>
+                </filters>
+            </build>
+        </profile>
+        <profile>
+            <id>dev</id>
+            <properties>
+                <env>dev</env>
+            </properties>
+            <build>
+                <filters>
+                    <filter>${basedir}/src/main/resources/db/env/dev/db.properties</filter>
+                </filters>
+            </build>
+        </profile>
+        <profile>
+            <id>product</id>
+            <properties>
+                <env>product</env>
+            </properties>
+            <build>
+                <filters>
+                    <filter>${basedir}/src/main/resources/db/env/product/db.properties</filter>
+                </filters>
+            </build>
+        </profile>
+    </profiles>
+
+    <build>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <version>2.1</version>
+                <configuration>
+                    <!-- 注意此处的url,它的值就是第一步中的tomcat发布应用管理页面地址 -->
+                    <url>http://192.168.31.188:8080/manager/text</url>
+                    <!-- 此处的名字必须和setting.xml中配置的ID一致 -->
+                    <!--<server>tomcat7</server>-->
+                    <username>admin</username>
+                    <password>52013141992</password>
+                    <!-- 可以灵活配置端口号 -->
+                    <!-- <port>80</port>-->
+                    <!-- 此处的名字是项目发布的工程名 -->
+                    <path>/mmall</path>
+                    <!--tomcat的url编码，达到和修改server.xml文件一样的功能-->
+                    <uriEncoding>UTF-8</uriEncoding>
+                </configuration>
+               <!-- <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>-->
+            </plugin>
+        </plugins>
+
+        <!--打包后war的名称-->
+        <finalName>${project.artifactId}-${env}</finalName>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>**/*.properties</include>
+                </includes>
+                <!--开发filter 替换properties文件中的动态内容-->
+                <filtering>true</filtering>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                </includes>
+                <filtering>false</filtering>
+            </resource>
+        </resources>
+
+    </build>
+
+
 </project>
