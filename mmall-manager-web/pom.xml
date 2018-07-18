@@ -32,22 +32,24 @@
 
     <!--实现测试环境、开发环境、生产环境的动态配置-->
     <profiles>
+
         <profile>
             <id>test</id>
             <properties>
                 <env>test</env>
             </properties>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
             <build>
                 <filters>
                     <filter>${basedir}/src/main/resources/db/env/test/db.properties</filter>
                 </filters>
             </build>
         </profile>
+
         <profile>
             <id>dev</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
             <properties>
                 <env>dev</env>
             </properties>
@@ -57,6 +59,7 @@
                 </filters>
             </build>
         </profile>
+
         <profile>
             <id>product</id>
             <properties>
@@ -68,6 +71,7 @@
                 </filters>
             </build>
         </profile>
+
     </profiles>
 
     <build>
@@ -91,14 +95,14 @@
                     <!--tomcat的url编码，达到和修改server.xml文件一样的功能-->
                     <uriEncoding>UTF-8</uriEncoding>
                 </configuration>
-               <!-- <executions>
+                <executions>
                     <execution>
                         <phase>package</phase>
                         <goals>
                             <goal>run</goal>
                         </goals>
                     </execution>
-                </executions>-->
+                </executions>
             </plugin>
         </plugins>
 

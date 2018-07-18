@@ -64,6 +64,11 @@ public class ResultUtils<T> implements Serializable {
         return new ResultUtils<T>(ResultCode.ERROR.getCode() ,msg);
     }
 
+    public static <T>ResultUtils<T> createIlleagalAgrError(T error){
+
+        return new ResultUtils<T>(ResultCode.ILLEGAL_ARGUMENT.getCode() , ResultCode.ILLEGAL_ARGUMENT.getDesc(), error);
+    }
+
     public static <T>ResultUtils<T> createResult(Integer code , String msg , T data){
 
         return new ResultUtils<T>(code , msg , data);

@@ -92,7 +92,7 @@ public class BaseController  {
     /** 基于@ExceptionHandler异常处理 */
     @ExceptionHandler
     public String exp(HttpServletRequest request, HttpServletResponse httpServletResponse,Exception e) {
-        LogUtils.d("======================exp");
+        LogUtils.d("======================exp"+e.getMessage());
         if (e instanceof RestException){
             ResultUtils exp = ResultUtils.createResult(((RestException) e).getCode() , ((RestException) e).getMsg());
             writeJson(httpServletResponse , gson.toJson(exp));

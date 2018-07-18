@@ -7,6 +7,7 @@ import com.yyyu.mmall.controller.BaseController;
 import com.yyyu.mmall.global.Constant;
 import com.yyyu.mmall.uitls.codec.DESCoder;
 import com.yyyu.mmall.uitls.controller.ResultUtils;
+import com.yyyu.mmall.uitls.controller.validator.AjaxError;
 import com.yyyu.mmall.uitls.lang.StringUtils;
 import com.yyyu.mmall.utils.TokenManager;
 import com.yyyu.user.pojo.MallUser;
@@ -23,11 +24,13 @@ import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -98,31 +101,29 @@ public class UserController extends BaseController{
             produces=MediaType.APPLICATION_JSON_VALUE)
     @RequestMapping(value = "v1/user" , method = RequestMethod.POST)
     @ResponseBody
-    public ResultUtils addUser(@ApiParam(value = "用户信息", required = true ) @RequestBody UserVo userVo){
+    public ResultUtils addUser(@ApiParam(value = "用户信息", required = true ) @Valid @RequestBody UserVo userVo , BindingResult result){
 
-        try {
+        if (result.hasErrors()){
 
-            //查看用户名是否已经存在
-            List<MallUser> mallUsers = userService.selectByUsername(userVo.getUsername());
-            if (mallUsers.size()>0){
-                return ResultUtils.createError("该用户名已存在");
-            }
-
-            MallUser mallUser = new MallUser();
-            mallUser.setUsername(userVo.getUsername());
-            //todo 加密
-            mallUser.setPassword(userVo.getPassword());
-            mallUser.setPhone(userVo.getPhone());
-            mallUser.setEmail(userVo.getEmail());
-            mallUser.setStatus(userVo.getStatus());
-            mallUser.setQuestion(userVo.getQuestion());
-            // todo 加密
-            mallUser.setAnswer(userVo.getAnswer());
-            userService.addUser(mallUser);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResultUtils.createError(e.getMessage());
+            return ResultUtils.createIlleagalAgrError(AjaxError.from(result , null));
         }
+
+        //查看用户名是否已经存在
+        List<MallUser> mallUsers = userService.selectByUsername(userVo.getUsername());
+        if (mallUsers.size()>0){
+            return ResultUtils.createError("该用户名已存在");
+        }
+        MallUser mallUser = new MallUser();
+        mallUser.setUsername(userVo.getUsername());
+        //todo 加密
+        mallUser.setPassword(userVo.getPassword());
+        mallUser.setPhone(userVo.getPhone());
+        mallUser.setEmail(userVo.getEmail());
+        mallUser.setStatus(userVo.getStatus());
+        mallUser.setQuestion(userVo.getQuestion());
+        // todo 加密
+        mallUser.setAnswer(userVo.getAnswer());
+        userService.addUser(mallUser);
 
         return ResultUtils.createSuccess("添加用户成功");
     }
