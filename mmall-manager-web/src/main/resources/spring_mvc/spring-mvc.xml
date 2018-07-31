@@ -67,6 +67,7 @@
             <mvc:exclude-mapping path="/**/*.jpeg"/>
             <mvc:exclude-mapping path="/**/*login*"/>
             <mvc:exclude-mapping path="/**/*Login*"/>
+            <mvc:exclude-mapping path="/**/validateCode/generate"/>
             <mvc:exclude-mapping path="/**/*test*"/>
             <mvc:exclude-mapping path="/**/swagger-*/**"/>
             <mvc:exclude-mapping path="/**/*api*"/>
@@ -75,6 +76,10 @@
         <mvc:interceptor>
             <mvc:mapping path="/**"/>
             <bean class="com.yyyu.mmall.filter.PerformanceInterceptor"/>
+        </mvc:interceptor>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <bean class="com.yyyu.mmall.filter.XHRInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>
 

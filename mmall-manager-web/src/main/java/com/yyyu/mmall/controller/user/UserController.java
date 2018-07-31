@@ -6,8 +6,11 @@ import com.google.gson.Gson;
 import com.yyyu.mmall.controller.BaseController;
 import com.yyyu.mmall.global.Constant;
 import com.yyyu.mmall.uitls.codec.DESCoder;
+import com.yyyu.mmall.uitls.controller.RestException;
+import com.yyyu.mmall.uitls.controller.ResultCode;
 import com.yyyu.mmall.uitls.controller.ResultUtils;
 import com.yyyu.mmall.uitls.controller.validator.AjaxError;
+import com.yyyu.mmall.uitls.lang.LogUtils;
 import com.yyyu.mmall.uitls.lang.StringUtils;
 import com.yyyu.mmall.utils.TokenManager;
 import com.yyyu.user.pojo.MallUser;
@@ -30,13 +33,17 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import static com.yyyu.mmall.uitls.controller.validate_code.ValidateCode.VALIDATE_CODE_SESSION;
+
 /**
  * 功能：用户相关Controller
+ *
  * @author yu
  * @date 2018/1/24.
  */
@@ -44,7 +51,7 @@ import java.util.List;
         produces = MediaType.APPLICATION_JSON_VALUE)
 @RequestMapping("api/user")
 @Controller
-public class UserController extends BaseController{
+public class UserController extends BaseController {
 
     @Autowired
     private UserServiceInter userService;
@@ -54,43 +61,56 @@ public class UserController extends BaseController{
 
     @ApiOperation(value = "用户登录",
             httpMethod = "POST")
-    @RequestMapping(value = "v1/user/login" , method = RequestMethod.POST)
+    @RequestMapping(value = "v1/user/login", method = RequestMethod.POST)
     @ResponseBody
-    public ResultUtils login(@ApiParam(value = "用户名", required = true ) @RequestParam("username") String username ,
-                             @ApiParam(value = "密码", required = true )@RequestParam("pwd") String pwd ,
-                              HttpServletResponse response){
+    public ResultUtils login(@ApiParam(value = "用户名", required = true) @RequestParam("username") String username,
+                             @ApiParam(value = "密码", required = true) @RequestParam("pwd") String pwd,
+                             @ApiParam(value = "验证码", required = true) @RequestParam("code") String code,
+                             HttpServletResponse response, HttpServletRequest request) throws RestException {
+
+        HttpSession session = request.getSession();
+        String sessionCode = (String) session.getAttribute(VALIDATE_CODE_SESSION);
+
+        //LogUtils.e("code："+code+"    sessionCode1："+sessionCode);
+
+        if (StringUtils.isEmpty(code)) {  //忽略验证码大小写
+            throw new RestException(ResultCode.VALIDATE_CODE_IS_NULL);
+        }
+        if (!code.equalsIgnoreCase(sessionCode)) {
+            throw new RestException(ResultCode.VALIDATE_CODE_ILLEGAL);
+        }
 
         LoginReturn loginReturn = new LoginReturn();
 
-            List<MallUser> mallUsers = userService.selectByUsername(username);
-            if (mallUsers==null|| mallUsers.size()<=0){
-                return ResultUtils.createError(",用户名或密码错误");
-            }
-            MallUser mallUser = mallUsers.get(0);
-            String password = mallUser.getPassword();
-            if (!pwd.equals(password)){
-                return ResultUtils.createError("用户名或密码错误");
-            }
-            loginReturn.setUserId(mallUser.getUserId());
-            loginReturn.setUsername(mallUser.getUsername());
-            loginReturn.setEmail(mallUser.getEmail());
-            loginReturn.setPhone(mallUser.getPhone());
-            loginReturn.setStatus(mallUser.getStatus());
-            loginReturn.setCreateTime(mallUser.getCreateTime());
-            loginReturn.setUpdateTime(mallUser.getUpdateTime());
-            //生成token
-            String token = TokenManager.getInstance().genToken(mallUser.getUserId());
-            // 保存到数据库
+        List<MallUser> mallUsers = userService.selectByUsername(username);
+        if (mallUsers == null || mallUsers.size() <= 0) {
+            return ResultUtils.createError("用户名或密码错误");
+        }
+        MallUser mallUser = mallUsers.get(0);
+        String password = mallUser.getPassword();
+        if (!pwd.equals(password)) {
+            return ResultUtils.createError("用户名或密码错误");
+        }
+        loginReturn.setUserId(mallUser.getUserId());
+        loginReturn.setUsername(mallUser.getUsername());
+        loginReturn.setEmail(mallUser.getEmail());
+        loginReturn.setPhone(mallUser.getPhone());
+        loginReturn.setStatus(mallUser.getStatus());
+        loginReturn.setCreateTime(mallUser.getCreateTime());
+        loginReturn.setUpdateTime(mallUser.getUpdateTime());
+        //生成token
+        String token = TokenManager.getInstance().genToken(mallUser.getUserId());
+        // 保存到数据库
           /*  MallUserToken userToken = new MallUserToken();
             userToken.setUserId(mallUser.getUserId());
             userToken.setSessionId(token);
             userTokenService.addUserToken(userToken);*/
-            loginReturn.setToken(token);
-            //加入到cookie缓存
-            Cookie cookie = new Cookie(Constant.TOKEN, token);
-            cookie.setPath("/");
-            cookie.setMaxAge(Integer.MAX_VALUE);
-            response.addCookie(cookie);
+        loginReturn.setToken(token);
+        //加入到cookie缓存
+        Cookie cookie = new Cookie(Constant.TOKEN, token);
+        cookie.setPath("/");
+        cookie.setMaxAge(Integer.MAX_VALUE);
+        response.addCookie(cookie);
 
         return ResultUtils.createSuccess(loginReturn);
     }
@@ -98,19 +118,19 @@ public class UserController extends BaseController{
     @ApiOperation(value = "添加用户",
             notes = "传入json格式的用户信息的",
             httpMethod = "POST",
-            produces=MediaType.APPLICATION_JSON_VALUE)
-    @RequestMapping(value = "v1/user" , method = RequestMethod.POST)
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "v1/user", method = RequestMethod.POST)
     @ResponseBody
-    public ResultUtils addUser(@ApiParam(value = "用户信息", required = true ) @Valid @RequestBody UserVo userVo , BindingResult result){
+    public ResultUtils addUser(@ApiParam(value = "用户信息", required = true) @Valid @RequestBody UserVo userVo, BindingResult result) {
 
-        if (result.hasErrors()){
+        if (result.hasErrors()) {
 
-            return ResultUtils.createIlleagalAgrError(AjaxError.from(result , null));
+            return ResultUtils.createIlleagalAgrError(AjaxError.from(result, null));
         }
 
         //查看用户名是否已经存在
         List<MallUser> mallUsers = userService.selectByUsername(userVo.getUsername());
-        if (mallUsers.size()>0){
+        if (mallUsers.size() > 0) {
             return ResultUtils.createError("该用户名已存在");
         }
         MallUser mallUser = new MallUser();
@@ -130,10 +150,10 @@ public class UserController extends BaseController{
 
     @ApiOperation(value = "批量删除用户",
             httpMethod = "POST",
-            produces=MediaType.APPLICATION_JSON_VALUE)
+            produces = MediaType.APPLICATION_JSON_VALUE)
     @RequestMapping(value = "v1/users:delete", method = RequestMethod.POST)
     @ResponseBody
-    public ResultUtils deleteUser(@RequestBody List<Long> userIdList){
+    public ResultUtils deleteUser(@RequestBody List<Long> userIdList) {
 
         try {
             userService.reallyDeleteUserByIdList(userIdList);
@@ -147,10 +167,10 @@ public class UserController extends BaseController{
 
     @ApiOperation(value = "删除用户",
             httpMethod = "DELETE",
-            produces=MediaType.APPLICATION_JSON_VALUE)
+            produces = MediaType.APPLICATION_JSON_VALUE)
     @RequestMapping(value = "v1/users/{userId}", method = RequestMethod.DELETE)
     @ResponseBody
-    public ResultUtils deleteUser(@ApiParam(value = "用户id"  , required = true) @PathVariable  Long userId){
+    public ResultUtils deleteUser(@ApiParam(value = "用户id", required = true) @PathVariable Long userId) {
 
         userService.reallyDeleteUserById(userId);
 
@@ -161,14 +181,14 @@ public class UserController extends BaseController{
     @ApiOperation(value = "修改用户",
             notes = "传入json格式的用户信息的，需要admin权限才能操作",
             httpMethod = "PATCH",
-            produces=MediaType.APPLICATION_JSON_VALUE)
-    @RequestMapping(value = "v1/user" , method = RequestMethod.PATCH )
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "v1/user", method = RequestMethod.PATCH)
     @ResponseBody
-    public ResultUtils updateUser(@RequestBody UserUpdateVo userUpdateVo){
+    public ResultUtils updateUser(@RequestBody UserUpdateVo userUpdateVo) {
 
         //查看用户名是否已经存在
         List<MallUser> mallUsers = userService.selectByUsername(userUpdateVo.getUsername());
-        if (mallUsers.size()>0){
+        if (mallUsers.size() > 0) {
             return ResultUtils.createError("该用户名已存在");
         }
         MallUser user = new MallUser();
@@ -183,18 +203,18 @@ public class UserController extends BaseController{
         user.setAnswer(userUpdateVo.getAnswer());
         userService.updateUser(user);
         MallUser mallUser = userService.selectByUserId(userUpdateVo.getUserId());
-        return ResultUtils.createSuccess("修改用户信息成功",mallUser);
+        return ResultUtils.createSuccess("修改用户信息成功", mallUser);
     }
 
 
     @ApiOperation(value = "根据Id获得用户信息",
             notes = "传入用户id",
             httpMethod = "GET",
-            produces=MediaType.APPLICATION_JSON_VALUE)
-    @RequestMapping(value = "v1/users/{userId}",method = RequestMethod.GET)
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "v1/users/{userId}", method = RequestMethod.GET)
     @JsonView(MallUser.UserReturn.class)
     @ResponseBody
-    public ResultUtils  getUserById(@ApiParam(value = "用户id",  required = true) @PathVariable("userId")  Long userId){
+    public ResultUtils getUserById(@ApiParam(value = "用户id", required = true) @PathVariable("userId") Long userId) {
         MallUser mallUser;
         mallUser = userService.selectByUserId(userId);
         return ResultUtils.createSuccess(mallUser);
@@ -205,43 +225,43 @@ public class UserController extends BaseController{
             notes = "传入分页信息",
             httpMethod = "GET",
             response = ResultUtils.class,
-            produces=MediaType.APPLICATION_JSON_VALUE)
+            produces = MediaType.APPLICATION_JSON_VALUE)
     @RequestMapping(value = "v1/users", method = RequestMethod.GET)
     @JsonView(MallUser.UserDetail.class)
     @ResponseBody
-    public ResultUtils getUserByPage(@ApiParam(value = "从第几行开始区数据", required = true) @RequestParam(defaultValue = "0") Integer start ,
-                                     @ApiParam(value = "取数据的条数" , required = true)  @RequestParam(defaultValue = "10") Integer size ,
-                                     HttpServletRequest request){
+    public ResultUtils getUserByPage(@ApiParam(value = "从第几行开始区数据", required = true) @RequestParam(defaultValue = "0") Integer start,
+                                     @ApiParam(value = "取数据的条数", required = true) @RequestParam(defaultValue = "10") Integer size,
+                                     HttpServletRequest request) {
 
         PageInfo<MallUser> mallUserPageInfo;
-        String sort = getParameterUtf8(request , "sort");
-        String order =  getParameterUtf8(request , "order");
-        String username =  getParameterUtf8(request , "username");
+        String sort = getParameterUtf8(request, "sort");
+        String order = getParameterUtf8(request, "order");
+        String username = getParameterUtf8(request, "username");
         MallUserExample mallUserExample = new MallUserExample();
         String orderByClause = genOrderByClause(sort, order);
-        if (!StringUtils.isEmpty(orderByClause)){
+        if (!StringUtils.isEmpty(orderByClause)) {
             mallUserExample.setOrderByClause(orderByClause);
         }
-        if(!StringUtils.isEmpty(username)){
-            mallUserExample.createCriteria().andUsernameLike("%"+username+"%");
+        if (!StringUtils.isEmpty(username)) {
+            mallUserExample.createCriteria().andUsernameLike("%" + username + "%");
         }
-        mallUserPageInfo = userService.selectUserByPage(start,size , mallUserExample);
+        mallUserPageInfo = userService.selectUserByPage(start, size, mallUserExample);
         return ResultUtils.createSuccess(mallUserPageInfo);
     }
 
     @RequestMapping(value = "v1/session/test", method = RequestMethod.GET)
     @JsonView(MallUser.UserDetail.class)
     @ResponseBody
-    public ResultUtils getTokenJwt(){
+    public ResultUtils getTokenJwt() {
         Calendar calendar = Calendar.getInstance();
         Date currentDate = new Date(System.currentTimeMillis());
         calendar.setTime(currentDate);
-        calendar.add(Calendar.DATE , 7);
+        calendar.add(Calendar.DATE, 7);
         TokenJwt tokenJwt = new TokenJwt(2 + "", currentDate.getTime(), calendar.getTime().getTime());
         String tokenJwtStr = new Gson().toJson(tokenJwt);
         String encryptJwt = DESCoder.encrypt(tokenJwtStr, Constant.DES_KEY);
-        int i=100/0;
-        return ResultUtils.createSuccess("获取数据成功" , encryptJwt);
+        int i = 100 / 0;
+        return ResultUtils.createSuccess("获取数据成功", encryptJwt);
     }
 
 

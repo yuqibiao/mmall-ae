@@ -37,4 +37,9 @@ public class RestException extends Exception{
     public void setMsg(String msg) {
         this.msg = msg;
     }
+
+    @Override
+    public String getMessage() {
+        return getMsg();
+    }
 }

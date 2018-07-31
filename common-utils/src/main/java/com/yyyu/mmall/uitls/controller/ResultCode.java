@@ -23,7 +23,9 @@ public enum  ResultCode {
 
     //---认证相关
     //未登录
-    NEED_LOGIN(2001,"NEED_LOGIN");
+    NEED_LOGIN(2001,"NEED_LOGIN"),
+    VALIDATE_CODE_IS_NULL(2011 , "验证码为空"),
+    VALIDATE_CODE_ILLEGAL(2012 , "验证码不正确");
 
     final private int code;
     final private String desc;
